@@ -182,6 +182,7 @@
         }
 
         .btn:active { transform: scale(0.97); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-success { background: linear-gradient(135deg, var(--success), #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
         .btn-danger { background: linear-gradient(135deg, var(--danger), #e11d48); box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3); }
         .btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: #000; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2); }
@@ -441,6 +442,10 @@
             transition: transform 0.3s;
         }
 
+        .accordion-header.static::after {
+            content: none;
+        }
+
         .jaw-box.open .accordion-header::after {
             transform: rotate(180deg);
         }
@@ -698,9 +703,7 @@
         }
     </style>
 </head>
-<body class="privacy-active">
-
-    <div class="app-container">
+<body class="privacy-active">  <div class="app-container">
 
         <!-- LOGIN SCREEN -->
         <div id="screen-login" class="card" style="margin-top: 40px;">
@@ -713,15 +716,15 @@
             </div>
             <div class="form-group">
                 <label>Giriş (Login)</label>
-                <input type="text" id="login-user" value="admin" placeholder="admin">
+                <input type="text" id="login-user" value="" placeholder="Login daxil edin" autocomplete="username">
             </div>
             <div class="form-group">
                 <label>Şifrə (Parol)</label>
-                <input type="password" id="login-pass" value="" placeholder="Şifrəni daxil edin">
+                <input type="password" id="login-pass" value="" placeholder="Şifrəni daxil edin" autocomplete="current-password" onKeyPress="if(event.key==='Enter') doLogin()">
             </div>
-            <button type="button" class="btn" onclick="doLogin()">Daxil Ol</button>
+            <button type="button" class="btn" onClick="doLogin()">Daxil Ol</button>
             <div style="text-align: center; margin-top: 12px;">
-                <a href="#" onclick="navTo('screen-forgot')" style="font-size: 12px; color: var(--neon-cyan); text-decoration: none; font-weight: 700;">Şifrəni unutmusunuz?</a>
+                <a href="#" onClick="navTo('screen-forgot'); return false;" style="font-size: 12px; color: var(--neon-cyan); text-decoration: none; font-weight: 700;">Şifrəni unutmusunuz?</a>
             </div>
         </div>
 
@@ -730,12 +733,12 @@
             <div class="card" style="margin-top: 40px;">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">🔐 Şifrə Bərpası</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-login')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-login')">Geri</button>
                 </div>
-                
+
                 <div class="period-grid" style="margin-bottom: 15px;">
-                    <button type="button" class="period-btn active" id="fg-tab-mail" onclick="switchForgotTab('mail')">1. Mail ilə</button>
-                    <button type="button" class="period-btn" id="fg-tab-secret" onclick="switchForgotTab('secret')">2. Gizli Söz ilə</button>
+                    <button type="button" class="period-btn active" id="fg-tab-mail" onClick="switchForgotTab('mail')">1. Mail ilə</button>
+                    <button type="button" class="period-btn" id="fg-tab-secret" onClick="switchForgotTab('secret')">2. Gizli Söz ilə</button>
                 </div>
 
                 <!-- MAIL BƏRPA -->
@@ -745,7 +748,7 @@
                         <label>E-poçt Ünvanınız</label>
                         <input type="email" id="fg-email-input" placeholder="mail@gmail.com">
                     </div>
-                    <button type="button" class="btn btn-success" onclick="recoverByMail()">Şifrəni Mailə Göndər</button>
+                    <button type="button" class="btn btn-success" onClick="recoverByMail()">Şifrəni Mailə Göndər</button>
                 </div>
 
                 <!-- GİZLİ SÖZ BƏRPA -->
@@ -759,7 +762,7 @@
                         <label>Yeni Şifrə</label>
                         <input type="password" id="fg-new-pass" placeholder="Yeni şifrə daxil edin">
                     </div>
-                    <button type="button" class="btn btn-warning" onclick="recoverBySecretWord()">Şifrəni Yenilə</button>
+                    <button type="button" class="btn btn-warning" onClick="recoverBySecretWord()">Şifrəni Yenilə</button>
                 </div>
             </div>
         </div>
@@ -768,7 +771,7 @@
         <div id="screen-home" class="hidden">
             <div class="card">
                 <div class="header-bar">
-                    <div class="logo-container" style="cursor:pointer;" onclick="navTo('screen-profile')" title="Profilə bax">
+                    <div class="logo-container" style="cursor:pointer;" onClick="navTo('screen-profile')" title="Profilə bax">
                         <div class="logo-icon" style="width:36px; height:36px; font-size:14px;">AC</div>
                         <div class="logo-text-wrap">
                             <span class="logo-title" id="home-profile-name">A.Cəfərli</span>
@@ -776,69 +779,69 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:5px; flex-wrap:wrap; justify-content:flex-end; align-items: center;">
-                        <button type="button" onclick="togglePrivacyMode()" id="privacy-toggle-btn" class="btn btn-secondary" style="width:auto; padding:6px 10px; font-size:14px; margin-top:0;" title="Məxfiliyi aç / bağla">🔒</button>
-                        <button type="button" onclick="openNotificationsModal()" class="btn btn-warning" style="width:auto; padding:6px 10px; font-size:12px; margin-top:0; position:relative; display:flex; align-items:center; gap:4px;">
+                        <button type="button" onClick="togglePrivacyMode()" id="privacy-toggle-btn" class="btn btn-secondary" style="width:auto; padding:6px 10px; font-size:14px; margin-top:0;" title="Məxfiliyi aç / bağla">🔒</button>
+                        <button type="button" onClick="openNotificationsModal()" class="btn btn-warning" style="width:auto; padding:6px 10px; font-size:12px; margin-top:0; position:relative; display:flex; align-items:center; gap:4px;">
                             🔔 <span id="notif-badge" style="background:var(--danger); color:white; border-radius:10px; padding:1px 6px; font-size:10px; font-weight:900;">0</span>
                         </button>
-                        <button type="button" class="btn btn-success" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onclick="navTo('screen-stats')">📈 Statistika</button>
-                        <button type="button" class="btn btn-ai" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onclick="navTo('screen-ai')">🤖 AI</button>
-                        <button type="button" class="btn btn-secondary" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onclick="navTo('screen-control')">İdarə</button>
-                        <button type="button" class="btn btn-danger" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onclick="doLogout()">Çıxış</button>
+                        <button type="button" class="btn btn-success" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onClick="navTo('screen-stats')">📈 Statistika</button>
+                        <button type="button" class="btn btn-ai" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onClick="navTo('screen-ai')">🤖 AI</button>
+                        <button type="button" class="btn btn-secondary" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onClick="navTo('screen-control')">İdarə</button>
+                        <button type="button" class="btn btn-danger" style="width:auto; padding:6px 10px; font-size:11px; display:inline-block; margin-top:0;" onClick="doLogout()">Çıxış</button>
                     </div>
                 </div>
 
                 <div class="period-grid">
-                    <button type="button" class="period-btn active" id="p-gun" onclick="setPeriod('gun')">Bu gün</button>
-                    <button type="button" class="period-btn" id="p-ay" onclick="setPeriod('ay')">Bu ay</button>
-                    <button type="button" class="period-btn" id="p-il" onclick="setPeriod('il')">Bu il</button>
+                    <button type="button" class="period-btn active" id="p-gun" onClick="setPeriod('gun')">Bu gün</button>
+                    <button type="button" class="period-btn" id="p-ay" onClick="setPeriod('ay')">Bu ay</button>
+                    <button type="button" class="period-btn" id="p-il" onClick="setPeriod('il')">Bu il</button>
                 </div>
 
                 <div class="stats-container">
-                    <div class="stat-card" onclick="openStatDetailModal('tehvil')">
+                    <div class="stat-card" onClick="openStatDetailModal('tehvil')">
                         <span>Təhvil verilənlər</span>
                         <strong id="st-del-count">0 iş</strong>
                         <div style="font-size: 11px; color: var(--success); font-weight: 700; margin-top: 2px;" id="st-del-sum" class="money-val">0 AZN</div>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('gozleyen')">
+                    <div class="stat-card" onClick="openStatDetailModal('gozleyen')">
                         <span>Təhvil verilməyənlər</span>
                         <strong id="st-pend-count">0 iş</strong>
                         <div style="font-size: 11px; color: var(--warning); font-weight: 700; margin-top: 2px;" id="st-pend-sum" class="money-val">0 AZN</div>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('problemli')">
+                    <div class="stat-card" onClick="openStatDetailModal('problemli')">
                         <span>⚠️ Problemli İşlər</span>
                         <strong id="st-prob-count" style="color: var(--warning);">0 iş</strong>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('qazanilan')">
+                    <div class="stat-card" onClick="openStatDetailModal('qazanilan')">
                         <span>Daxil olan Qazanc</span>
                         <strong id="st-earned" class="money-val" style="color: var(--success);">0 AZN</strong>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('xalis')">
+                    <div class="stat-card" onClick="openStatDetailModal('xalis')">
                         <span>Xalis Qazanc</span>
                         <strong id="st-net-earned" class="money-val" style="color: var(--neon-cyan);">0 AZN</strong>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('borc')">
+                    <div class="stat-card" onClick="openStatDetailModal('borc')">
                         <span>Cəmi Borc</span>
                         <strong id="st-debt" class="money-val" style="color: var(--danger);">0 AZN</strong>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('avans')">
+                    <div class="stat-card" onClick="openStatDetailModal('avans')">
                         <span>Cəmi Avans</span>
                         <strong id="st-avans" class="money-val" style="color: var(--success);">0 AZN</strong>
                     </div>
                 </div>
 
                 <div class="jaw-box" style="margin-top: 14px; margin-bottom: 0;">
-                    <div class="accordion-header" style="cursor: default; color: var(--neon-cyan); justify-content: center;">📊 İŞ MƏRHƏLƏLƏRİNİN PLANLAŞDIRILMASI</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--neon-cyan); justify-content: center;">📊 İŞ MƏRHƏLƏLƏRİNİN PLANLAŞDIRILMASI</div>
                     <div style="margin-top: 10px;" id="home-stages-chart"></div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px;">
-                    <button type="button" class="btn btn-warning" style="margin-top:0; font-size:13px;" onclick="navTo('screen-search-doc')">🔍 Həkim Axtar</button>
-                    <button type="button" class="btn" style="margin-top:0; font-size:13px;" onclick="navTo('screen-search-pat')">🔎 Pasient Axtar</button>
+                    <button type="button" class="btn btn-warning" style="margin-top:0; font-size:13px;" onClick="navTo('screen-search-doc')">🔍 Həkim Axtar</button>
+                    <button type="button" class="btn" style="margin-top:0; font-size:13px;" onClick="navTo('screen-search-pat')">🔎 Pasient Axtar</button>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top: 12px;">
-                    <button type="button" class="btn btn-success" style="margin-top: 0; background: linear-gradient(135deg, var(--neon-cyan), var(--primary));" onclick="openAddJob()">+ Yeni İş</button>
-                    <button type="button" class="btn btn-success" style="margin-top: 0;" onclick="navTo('screen-add-money')">+ Ödəniş Qəbul Et</button>
+                    <button type="button" class="btn btn-success" style="margin-top: 0; background: linear-gradient(135deg, var(--neon-cyan), var(--primary));" onClick="openAddJob()">+ Yeni İş</button>
+                    <button type="button" class="btn btn-success" style="margin-top: 0;" onClick="navTo('screen-add-money')">+ Ödəniş Qəbul Et</button>
                 </div>
             </div>
 
@@ -852,23 +855,23 @@
                 <div class="filter-section-title">⚡ İş Siyahısı & Filtrlər</div>
 
                 <div class="filter-grid">
-                    <button type="button" class="filter-chip" id="f-today" onclick="toggleJobFilter('today')">
+                    <button type="button" class="filter-chip" id="f-today" onClick="toggleJobFilter('today')">
                         <span>📅 Bu Gün</span>
                         <span class="filter-count-badge" id="cnt-today">0</span>
                     </button>
-                    <button type="button" class="filter-chip" id="f-tomorrow" onclick="toggleJobFilter('tomorrow')">
+                    <button type="button" class="filter-chip" id="f-tomorrow" onClick="toggleJobFilter('tomorrow')">
                         <span>⏭️ Sabah</span>
                         <span class="filter-count-badge" id="cnt-tomorrow">0</span>
                     </button>
-                    <button type="button" class="filter-chip" id="f-date" onclick="openCalendarFilter()">
+                    <button type="button" class="filter-chip" id="f-date" onClick="openCalendarFilter()">
                         <span>📆 Tarix</span>
                         <span class="filter-count-badge" id="cnt-date">📅</span>
                     </button>
-                    <button type="button" class="filter-chip urgent-chip" id="f-urgent" onclick="toggleJobFilter('urgent')">
+                    <button type="button" class="filter-chip urgent-chip" id="f-urgent" onClick="toggleJobFilter('urgent')">
                         <span>🔥 Təcili İşlər</span>
                         <span class="filter-count-badge" id="cnt-urgent">0</span>
                     </button>
-                    <button type="button" class="filter-chip problem-chip" id="f-problem" onclick="toggleJobFilter('problem')">
+                    <button type="button" class="filter-chip problem-chip" id="f-problem" onClick="toggleJobFilter('problem')">
                         <span>⚠️ Problemli / Riskli İşlər</span>
                         <span class="filter-count-badge" id="cnt-problem">0</span>
                     </button>
@@ -878,9 +881,9 @@
                     <div style="font-size: 11px; color: var(--warning); margin-bottom: 6px; text-align: center;">💡 Günə 1 dəfə toxunaraq işlərinə baxa, <b>2 dəfə toxunmaqla</b> isə həmin tarixə yeni iş əlavə edə bilərsiniz.</div>
                     <div class="custom-calendar">
                         <div class="cal-header">
-                            <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 10px; font-size:11px; margin-top:0;" onclick="changeCalendarMonth(-1)">◀</button>
+                            <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 10px; font-size:11px; margin-top:0;" onClick="changeCalendarMonth(-1)">◀</button>
                             <span id="cal-month-title">Ay İl</span>
-                            <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 10px; font-size:11px; margin-top:0;" onclick="changeCalendarMonth(1)">▶</button>
+                            <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 10px; font-size:11px; margin-top:0;" onClick="changeCalendarMonth(1)">▶</button>
                         </div>
                         <div class="cal-weekdays">
                             <span>B.e</span><span>Ç.ax</span><span>Ç</span><span>C.ax</span><span>C</span><span>Şə</span><span>Ba</span>
@@ -900,7 +903,7 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">👤 Şəxsi Profil</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
 
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -934,7 +937,7 @@
                     <input type="password" id="prof-pass" placeholder="Boş buraxın əgər dəyişmək istəmirsinizsə">
                 </div>
 
-                <button type="button" class="btn btn-success" onclick="saveProfileData()">Profili Yadda Saxla</button>
+                <button type="button" class="btn btn-success" onClick="saveProfileData()">Profili Yadda Saxla</button>
             </div>
         </div>
 
@@ -943,21 +946,21 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">📈 Tam Laboratoriya Analitikası</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
 
                 <div class="stats-container" style="margin-bottom: 15px;">
-                    <div class="stat-card" onclick="openStatDetailModal('tehvil')">
+                    <div class="stat-card" onClick="openStatDetailModal('tehvil')">
                         <span>Təhvil verilənlər</span>
                         <strong id="dash-del-count">0</strong>
                         <div style="font-size: 11px; color: var(--success); font-weight: 700;" id="dash-del-sum" class="money-val">0 AZN</div>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('gozleyen')">
+                    <div class="stat-card" onClick="openStatDetailModal('gozleyen')">
                         <span>Təhvil verilməyənlər</span>
                         <strong id="dash-pend-count">0</strong>
                         <div style="font-size: 11px; color: var(--warning); font-weight: 700;" id="dash-pend-sum" class="money-val">0 AZN</div>
                     </div>
-                    <div class="stat-card" onclick="openStatDetailModal('problemli')">
+                    <div class="stat-card" onClick="openStatDetailModal('problemli')">
                         <span>Problemli İşlər</span>
                         <strong id="dash-prob-count" style="color:var(--warning);">0 iş</strong>
                     </div>
@@ -976,37 +979,37 @@
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--warning); justify-content: center;">⚡ İŞ YÜKÜ VƏ GƏRGİNLİK (TƏCİLİ / ADİ)</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--warning); justify-content: center;">⚡ İŞ YÜKÜ VƏ GƏRGİNLİK (TƏCİLİ / ADİ)</div>
                     <div style="margin-top: 10px;" id="dash-workload-chart"></div>
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--success); justify-content: center;">🏆 HƏKİMLƏRİN ÖDƏNİŞ İNTİZAMI</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--success); justify-content: center;">🏆 HƏKİMLƏRİN ÖDƏNİŞ İNTİZAMI</div>
                     <div style="margin-top: 10px;" id="dash-payment-discipline"></div>
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--neon-cyan); justify-content: center;">🦷 PROTEZ NÖVLƏRİ (ÜST VƏ ALT ÇƏNƏ)</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--neon-cyan); justify-content: center;">🦷 PROTEZ NÖVLƏRİ (ÜST VƏ ALT ÇƏNƏ)</div>
                     <div style="margin-top: 10px;" id="dash-popular-protez"></div>
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--primary); justify-content: center;">İŞ MƏRHƏLƏLƏRİNİN PAYLANMASI</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--primary); justify-content: center;">İŞ MƏRHƏLƏLƏRİNİN PAYLANMASI</div>
                     <div style="margin-top: 10px;" id="dash-stages-chart"></div>
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--neon-cyan); justify-content: center;">HƏKİMLƏR ÜZRƏ İŞ VƏ QAZANC PAYI</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--neon-cyan); justify-content: center;">HƏKİMLƏR ÜZRƏ İŞ VƏ QAZANC PAYI</div>
                     <div style="margin-top: 10px;" id="dash-doctors-chart"></div>
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--neon-cyan); justify-content: center;">📅 1 AYLIQ STATİSTİKA (CARI AY)</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--neon-cyan); justify-content: center;">📅 1 AYLIQ STATİSTİKA (CARİ AY)</div>
                     <div id="dash-monthly-daily-chart" style="display: flex; align-items: flex-end; justify-content: space-between; height: 140px; padding: 15px 2px 0 2px; gap: 3px; margin-top: 10px; overflow-x: auto;"></div>
                 </div>
 
                 <div class="jaw-box">
-                    <div class="accordion-header" style="cursor: default; color: var(--neon-cyan); justify-content: center;">📊 6 AYLA MÜQAYİSƏ QRAFİKİ</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--neon-cyan); justify-content: center;">📊 6 AYLA MÜQAYİSƏ QRAFİKİ</div>
                     <div id="dash-monthly-chart" style="display: flex; align-items: flex-end; justify-content: space-between; height: 140px; padding: 15px 5px 0 5px; gap: 6px; margin-top: 10px;"></div>
                 </div>
             </div>
@@ -1017,10 +1020,10 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">🔍 Həkim Axtar & Hesabat</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
-                <div class="form-group"><label>Həkim Seçin:</label><select id="search-doctor-select" onchange="runSearchByDoctor()"></select></div>
-                
+                <div class="form-group"><label>Həkim Seçin:</label><select id="search-doctor-select" onChange="runSearchByDoctor('all')"></select></div>
+
                 <div id="search-doc-dynamic-report" style="margin-top: 15px;"></div>
             </div>
         </div>
@@ -1030,9 +1033,9 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">🔎 Pasient Axtar</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
-                <div class="form-group"><label>Həkim Seçin:</label><select id="search-pat-doc-select" onchange="runSearchByDoctorAndPatient()"></select></div>
+                <div class="form-group"><label>Həkim Seçin:</label><select id="search-pat-doc-select" onChange="runSearchByDoctorAndPatient()"></select></div>
                 <div class="form-group"><label>Pasientin Adı:</label><input type="text" id="search-patient-name-input" placeholder="Ad yazın..." oninput="runSearchByDoctorAndPatient()"></div>
                 <div id="search-pat-results" style="margin-top: 15px;"></div>
             </div>
@@ -1043,7 +1046,7 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--ai-color); font-weight: 800;">🤖 Ağıllı Sərbəst AI</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
 
                 <div class="chat-box" id="ai-chat-history">
@@ -1056,8 +1059,8 @@
                 </div>
 
                 <div style="display:flex; gap:8px;">
-                    <input type="text" id="ai-input" placeholder="Sərbəst yaz..." onkeypress="if(event.key==='Enter') sendAiMessage()">
-                    <button type="button" class="btn btn-ai" style="width:auto; margin-top:0; padding:0 18px;" onclick="sendAiMessage()">Göndər</button>
+                    <input type="text" id="ai-input" placeholder="Sərbəst yaz..." onKeyPress="if(event.key==='Enter') sendAiMessage()">
+                    <button type="button" class="btn btn-ai" style="width:auto; margin-top:0; padding:0 18px;" onClick="sendAiMessage()">Göndər</button>
                 </div>
             </div>
         </div>
@@ -1067,7 +1070,7 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 id="job-form-heading" style="font-size:18px; color:var(--primary); font-weight: 800;">Yeni İş Əlavə Et</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
 
                 <input type="hidden" id="edit-job-id">
@@ -1084,7 +1087,7 @@
 
                 <!-- ÜST ÇƏNƏ -->
                 <div class="jaw-box" id="acc-top">
-                    <div class="accordion-header" onclick="toggleAccordion('acc-top')"><span>🦷 ÜST ÇƏNƏ VƏ SEÇƏNƏklƏR</span></div>
+                    <div class="accordion-header" onClick="toggleAccordion('acc-top')"><span>🦷 ÜST ÇƏNƏ VƏ SEÇİMLƏR</span></div>
                     <div class="accordion-content">
                         <div class="section-subtitle">Protez Növü</div>
                         <div class="checkbox-grid" id="top-protez-boxes"></div>
@@ -1099,7 +1102,7 @@
 
                 <!-- ALT ÇƏNƏ -->
                 <div class="jaw-box" id="acc-bot">
-                    <div class="accordion-header" onclick="toggleAccordion('acc-bot')"><span>🦷 ALT ÇƏNƏ VƏ SEÇƏNƏklƏR</span></div>
+                    <div class="accordion-header" onClick="toggleAccordion('acc-bot')"><span>🦷 ALT ÇƏNƏ VƏ SEÇİMLƏR</span></div>
                     <div class="accordion-content">
                         <div class="section-subtitle">Protez Növü</div>
                         <div class="checkbox-grid" id="bot-protez-boxes"></div>
@@ -1114,7 +1117,7 @@
 
                 <!-- QARNİTUR -->
                 <div class="jaw-box" id="acc-qarnitur">
-                    <div class="accordion-header" onclick="toggleAccordion('acc-qarnitur')"><span>🎨 QARNİTUR</span></div>
+                    <div class="accordion-header" onClick="toggleAccordion('acc-qarnitur')"><span>🎨 QARNİTUR</span></div>
                     <div class="accordion-content">
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:6px;">
                             <div class="form-group"><label>Rəng</label><input type="text" id="qarnitur-rang" placeholder="A2, A3..."></div>
@@ -1127,7 +1130,7 @@
 
                 <!-- DİŞ SEÇİMİ -->
                 <div class="jaw-box" id="acc-teeth">
-                    <div class="accordion-header" onclick="toggleAccordion('acc-teeth')"><span>🦷 DİŞ SEÇİMİ</span></div>
+                    <div class="accordion-header" onClick="toggleAccordion('acc-teeth')"><span>🦷 DİŞ SEÇİMİ</span></div>
                     <div class="accordion-content">
                         <div class="section-subtitle" style="text-align:center;">Üst Çənə (8 7 6 5 4 3 2 1 | 1 2 3 4 5 6 7 8)</div>
                         <div class="teeth-row" id="top-jaw-row"></div>
@@ -1139,7 +1142,7 @@
 
                 <div class="form-group" style="margin-top: 15px;">
                     <label>Mərhələ</label>
-                    <select id="jf-stage" onchange="checkStageChange()">
+                    <select id="jf-stage" onChange="checkStageChange()">
                         <option value="İlk ölçü">İlk ölçü</option>
                         <option value="Ferdi qasıq">Ferdi qasıq</option>
                         <option value="Sablon">Sablon</option>
@@ -1162,17 +1165,17 @@
                     <label>Məbləğ (AZN)</label>
                     <input type="number" id="jf-price" placeholder="50" oninput="calculateJobEstimatedCost()">
                 </div>
-                
+
                 <div style="background:var(--input-bg); padding:10px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-color); font-size:12px;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span>Hesablanan Material Xərci:</span>
-                        <b id="jf-calc-mat-cost" style="color:var(--danger); cursor:pointer; text-decoration:underline;" class="money-val" onclick="openMaterialDetailModal()" title="Detallara baxmaq üçün toxun">0 AZN</b>
+                        <b id="jf-calc-mat-cost" style="color:var(--danger); cursor:pointer; text-decoration:underline;" class="money-val" onClick="openMaterialDetailModal()" title="Detallara baxmaq üçün toxun">0 AZN</b>
                     </div>
                     <div style="margin-top:4px;">Təxmini Xalis Qazanc: <b id="jf-calc-net-profit" style="color:var(--success);" class="money-val">0 AZN</b></div>
                 </div>
 
                 <div class="jaw-box" style="margin-bottom: 14px;">
-                    <div class="accordion-header" style="cursor: default; color: var(--warning); justify-content: center;">⏰ XATIRLATMA VƏ STATUSLAR</div>
+                    <div class="accordion-header static" style="cursor: default; color: var(--warning); justify-content: center;">⏰ XATIRLATMA VƏ STATUSLAR</div>
                     <div style="margin-top: 12px;">
                         <div class="form-group" style="margin-bottom: 10px;">
                             <label>Tarix və Saat</label>
@@ -1189,7 +1192,7 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-success" id="save-job-btn" onclick="checkAndSaveJob()">İşi Yadda Saxla</button>
+                <button type="button" class="btn btn-success" id="save-job-btn" onClick="checkAndSaveJob()">İşi Yadda Saxla</button>
             </div>
         </div>
 
@@ -1198,12 +1201,12 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">Ödəniş Qəbul Et</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:4px 12px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
-                <div class="form-group"><label>Həkim</label><select id="pay-doctor" onchange="updatePayDebtInfo()"></select></div>
+                <div class="form-group"><label>Həkim</label><select id="pay-doctor" onChange="updatePayDebtInfo()"></select></div>
                 <div id="pay-debt-info" style="font-size: 14px; font-weight: 700; color: var(--danger); margin-bottom: 12px;" class="money-val">Borc: 0 AZN</div>
-                <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" id="pay-amount" placeholder="60"></div>
-                <button type="button" class="btn btn-success" onclick="executePayment()">Ödənişi Qəbul Et</button>
+                <div class="form-group"><label>Məbləğ (AZN)</label><input type="number" id="pay-amount" placeholder="60" min="0"></div>
+                <button type="button" class="btn btn-success" onClick="executePayment()">Ödənişi Qəbul Et</button>
             </div>
         </div>
 
@@ -1212,31 +1215,31 @@
             <div class="card">
                 <div class="header-bar">
                     <h2 style="font-size:18px; color:var(--primary); font-weight: 800;">⚙️ İdarə Paneli</h2>
-                    <button type="button" class="btn btn-secondary" style="width:auto; padding:6px 14px; font-size:12px; margin-top:0;" onclick="navTo('screen-home')">Geri</button>
+                    <button type="button" class="btn btn-secondary" style="width:auto; padding:6px 14px; font-size:12px; margin-top:0;" onClick="navTo('screen-home')">Geri</button>
                 </div>
 
                 <!-- MATERIAL XƏRCLƏRİ BÖLMƏSİ -->
                 <div class="jaw-box" id="cp-materials-acc" style="margin-bottom: 14px;">
-                    <div class="accordion-header" onclick="toggleAccordion('cp-materials-acc')"><span>📦 MATRİAL XƏRCLƏRİ (1 ÇƏNƏ ÜÇÜN)</span></div>
+                    <div class="accordion-header" onClick="toggleAccordion('cp-materials-acc')"><span>📦 MATERİAL XƏRCLƏRİ (1 ÇƏNƏ ÜÇÜN)</span></div>
                     <div class="accordion-content">
-                        <div style="font-size: 11px; color: var(--text-sub); margin-bottom: 10px;">İstədiyiniz material qiymətini buradan dəyişib yadda saxlaya bilərsiniz.</div>
+                        <div style="font-size: 11px; color: var(--text-sub); margin-bottom: 10px;">İstədiyiniz material qiymətini buradan dəyişib yadda saxlaya bilərsiniz. Qiymət dəyişikliyi yalnız bundan sonra yadda saxlanan işlərə təsir edir.</div>
                         <div id="material-inputs-container" style="display: grid; grid-template-columns: 1fr; gap: 8px;"></div>
-                        <button type="button" class="btn btn-success" style="margin-top: 12px;" onclick="saveMaterialPrices()">Material Qiymətlərini Yadda Saxla</button>
+                        <button type="button" class="btn btn-success" style="margin-top: 12px;" onClick="saveMaterialPrices()">Material Qiymətlərini Yadda Saxla</button>
                     </div>
                 </div>
 
                 <div class="cp-section">
                     <div class="cp-title">💾 Baza Nüsxələri (Yedəkləmə)</div>
                     <div style="margin-bottom: 12px;">
-                        <button type="button" class="btn btn-success" style="margin-top:0;" onclick="exportDatabaseFile()">📥 Bazanı Telefonuna Yüklə (Export)</button>
+                        <button type="button" class="btn btn-success" style="margin-top:0;" onClick="exportDatabaseFile()">📥 Bazanı Telefonuna Yüklə (Export)</button>
                     </div>
                     <div style="margin-bottom: 12px;">
                         <input type="email" id="cp-user-email" placeholder="e-poçtunuz (məs: mail@gmail.com)" style="margin-bottom:6px;">
-                        <button type="button" class="btn btn-warning" style="margin-top:0;" onclick="sendDatabaseToEmail()">✉️ Bazanı Mailə Göndər</button>
+                        <button type="button" class="btn btn-warning" style="margin-top:0;" onClick="sendDatabaseToEmail()">✉️ Bazanı Mailə Göndər</button>
                     </div>
                     <div>
                         <label style="color:var(--primary); margin-bottom:4px;">Bazanı Bərpa Et (Upload JSON)</label>
-                        <input type="file" id="import-file-input" accept=".json" onchange="importDatabaseFile(event)">
+                        <input type="file" id="import-file-input" accept=".json" onChange="importDatabaseFile(event)">
                     </div>
                 </div>
 
@@ -1249,8 +1252,8 @@
                     <div class="form-group" style="margin-bottom: 10px;">
                         <input type="text" id="cp-doc-phone" placeholder="Nömrə (məs: 994501234567)">
                     </div>
-                    <button type="button" class="btn" id="cp-doc-save-btn" style="margin-top:0;" onclick="cpSaveDoctor()">Həkim Əlavə Et</button>
-                    
+                    <button type="button" class="btn" id="cp-doc-save-btn" style="margin-top:0;" onClick="cpSaveDoctor()">Həkim Əlavə Et</button>
+
                     <div style="margin-top: 15px;">
                         <label style="margin-bottom: 6px;">Mövcud Həkimlər Siyahısı</label>
                         <div id="cp-doctors-list"></div>
@@ -1259,19 +1262,19 @@
 
                 <div class="cp-section cp-danger-box">
                     <div class="cp-title">⚠️ Təmizləmə və Sıfırlama</div>
-                    
+
                     <div style="margin-bottom: 12px;">
                         <label style="color:var(--danger); margin-bottom:4px;">Həkim Üzrə Məlumat Sil</label>
                         <select id="cp-del-doc-select" style="margin-bottom:6px;"></select>
-                        <button type="button" class="btn btn-danger" style="margin-top:0; padding:10px;" onclick="deleteDataByDoctorPrompt()">Seçilən Həkimin İşlərini Sil</button>
+                        <button type="button" class="btn btn-danger" style="margin-top:0; padding:10px;" onClick="deleteDataByDoctorPrompt()">Seçilən Həkimin İşlərini Sil</button>
                     </div>
 
                     <div style="margin-bottom: 12px;">
-                        <button type="button" class="btn btn-danger" style="margin-top:0; padding:10px;" onclick="deleteAllPatientsPrompt()">Bütün Pasient İşlərini Təmizlə</button>
+                        <button type="button" class="btn btn-danger" style="margin-top:0; padding:10px;" onClick="deleteAllPatientsPrompt()">Bütün Pasient İşlərini Təmizlə</button>
                     </div>
 
                     <div>
-                        <button type="button" class="btn btn-danger" style="margin-top:0; padding:10px; background: linear-gradient(135deg, #7f1d1d, #991b1b);" onclick="clearAllDatabasePrompt()">🚨 Bütün Bazanı Sıfırla</button>
+                        <button type="button" class="btn btn-danger" style="margin-top:0; padding:10px; background: linear-gradient(135deg, #7f1d1d, #991b1b);" onClick="clearAllDatabasePrompt()">🚨 Bütün Bazanı Sıfırla</button>
                     </div>
                 </div>
 
@@ -1284,7 +1287,7 @@
     <div class="app-footer">
         © 2026 ACLab. All Rights Reserved.<br>
         Designed & Developed by A.Cəfərli<br>
-        Version 1.0.0 | Est. 2026
+        Version 1.0.1 | Est. 2026
     </div>
 
     <!-- MATERIAL DETALLARI MODALI -->
@@ -1292,10 +1295,10 @@
         <div class="modal-content">
             <div class="header-bar" style="margin-bottom: 12px;">
                 <h3 style="color:var(--primary); font-weight: 800;">📦 Material Xərclərinin Hesabatı</h3>
-                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onclick="closeMaterialDetailModal()">X</button>
+                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onClick="closeMaterialDetailModal()">X</button>
             </div>
             <div id="material-detail-modal-body" style="font-size: 13px; line-height: 1.6; margin-bottom: 15px; max-height: 60vh; overflow-y: auto;"></div>
-            <button type="button" class="btn btn-secondary" onclick="closeMaterialDetailModal()">Bağla</button>
+            <button type="button" class="btn btn-secondary" onClick="closeMaterialDetailModal()">Bağla</button>
         </div>
     </div>
 
@@ -1304,10 +1307,10 @@
         <div class="modal-content">
             <div class="header-bar" style="margin-bottom: 12px;">
                 <h3 style="color:var(--primary); font-weight: 800;">🔔 Aktiv Bildirişlər</h3>
-                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onclick="closeNotificationsModal()">X</button>
+                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onClick="closeNotificationsModal()">X</button>
             </div>
             <div id="notifications-modal-body" style="font-size: 13px; line-height: 1.6; margin-bottom: 15px; max-height: 60vh; overflow-y: auto;"></div>
-            <button type="button" class="btn btn-secondary" onclick="closeNotificationsModal()">Bağla</button>
+            <button type="button" class="btn btn-secondary" onClick="closeNotificationsModal()">Bağla</button>
         </div>
     </div>
 
@@ -1317,8 +1320,8 @@
             <div style="font-size: 18px; font-weight: 800; color: var(--warning); margin-bottom: 12px;">⚠️ Avans Bildirişi</div>
             <p id="avans-modal-text" style="font-size: 14px; line-height: 1.6; margin-bottom: 20px; text-align: left; background: var(--input-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color);"></p>
             <div style="display: flex; gap: 10px;">
-                <button type="button" class="btn btn-success" style="margin-top: 0;" onclick="resolveAvansChoice(true)">Bəli (Avansdan çıx)</button>
-                <button type="button" class="btn btn-danger" style="margin-top: 0;" onclick="resolveAvansChoice(false)">Xeyir (Avansa toxunma)</button>
+                <button type="button" class="btn btn-success" style="margin-top: 0;" onClick="resolveAvansChoice(true)">Bəli (Avansdan çıx)</button>
+                <button type="button" class="btn btn-danger" style="margin-top: 0;" onClick="resolveAvansChoice(false)">Xeyir (Avansa toxunma)</button>
             </div>
         </div>
     </div>
@@ -1328,10 +1331,10 @@
         <div class="modal-content">
             <div class="header-bar" style="margin-bottom: 12px;">
                 <h3 id="stat-modal-title" style="color:var(--primary); font-weight: 800;">Məlumat</h3>
-                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onclick="closeStatDetailModal()">X</button>
+                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onClick="closeStatDetailModal()">X</button>
             </div>
             <div id="stat-modal-body" style="font-size: 13px; line-height: 1.6; margin-bottom: 15px;"></div>
-            <button type="button" class="btn btn-secondary" onclick="closeStatDetailModal()">Bağla</button>
+            <button type="button" class="btn btn-secondary" onClick="closeStatDetailModal()">Bağla</button>
         </div>
     </div>
 
@@ -1340,11 +1343,11 @@
         <div class="modal-content">
             <div class="header-bar" style="margin-bottom: 12px;">
                 <h3 id="doc-modal-title" style="color:var(--primary); font-weight: 800;">Həkim Hesabatı</h3>
-                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onclick="closeDocModal()">X</button>
+                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onClick="closeDocModal()">X</button>
             </div>
             <div id="doc-modal-body" style="font-size: 13px; line-height: 1.6; margin-bottom: 15px;"></div>
             <div id="doc-modal-whatsapp-wrap" style="display:flex; flex-direction:column; gap:8px;"></div>
-            <button type="button" class="btn btn-secondary" style="margin-top:10px;" onclick="closeDocModal()">Bağla</button>
+            <button type="button" class="btn btn-secondary" style="margin-top:10px;" onClick="closeDocModal()">Bağla</button>
         </div>
     </div>
 
@@ -1353,22 +1356,50 @@
         <div class="modal-content">
             <div class="header-bar" style="margin-bottom: 12px;">
                 <h3 id="modal-patient-name" style="color:var(--primary); font-weight: 800;">Məlumat</h3>
-                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onclick="closeModal()">X</button>
+                <button type="button" class="btn btn-secondary" style="width:auto; padding:2px 10px; font-size:12px; margin-top:0;" onClick="closeModal()">X</button>
             </div>
             <div id="modal-body-content" style="font-size: 13px; line-height: 1.6;"></div>
             <div style="display:flex; gap:8px; margin-top:18px;">
                 <button type="button" class="btn" id="modal-edit-btn">Redaktə Et</button>
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Bağla</button>
+                <button type="button" class="btn btn-secondary" onClick="closeModal()">Bağla</button>
             </div>
         </div>
     </div>
 
     <script>
+        /* ================= YARDIMÇI FUNKSİYALAR ================= */
         function formatMoney(val) {
             let num = Number(val) || 0;
             return Math.round(num * 100) / 100;
         }
 
+        // HTML-ə təhlükəsiz yazmaq üçün (XSS və sınan düymələr qarşısı)
+        function escapeHtml(s) {
+            return String(s === undefined || s === null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // onclick="fn(...)" daxilində sətir ötürmək üçün
+        function jsArg(s) {
+            return escapeHtml(JSON.stringify(String(s === undefined || s === null ? '' : s)));
+        }
+
+        // Yerli (Bakı) tarix: YYYY-MM-DD (UTC ilə 4 saat geri qalma problemi aradan qalxır)
+        function localDateStr(d) {
+            d = d || new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+
+        function parseAmount(v) {
+            let n = parseFloat(String(v).replace(',', '.'));
+            return isNaN(n) ? 0 : formatMoney(n);
+        }
+
+        /* ================= MƏLUMAT SABİTLƏRİ ================= */
         const DEFAULT_MATERIALS = {
             "Gips": 6.00,
             "Mum": 2.00,
@@ -1392,46 +1423,76 @@
             "Metal bazis": 80.00
         };
 
+        // Siyahıdakı ad ilə qiymət cədvəlindəki ad fərqli olduqda
+        const MATERIAL_ALIAS = {
+            'Termoplast': 'Termoplastik',
+            'Astarlanma': 'Astarlama'
+        };
+
+        const BASE_MATERIAL_KEYS = ["Gips", "Mum", "Qarnitur (dişlər)", "Plastmas", "Fərdi qaşıq", "İzolyasiya", "Cilalama pastası", "Polirovka rezini"];
+        const PLAIN_PROTEZ = ['Sadə', 'Tam', 'Hissəvi'];
+
         const DATA_PROTEZ = ['Sadə', 'Tam', 'Hissəvi', 'Yumşaq', 'Şəffaf', 'Estetik', 'Neylon', 'Asetal', 'İmplant üstü', 'Mikro', 'Acry Free', 'Termoplast', 'Bügel'];
         const DATA_TAMIR = ['Klammer təmiri', 'Diş təmiri', 'Çat təmiri', 'Astarlanma'];
         const DATA_ELAVELER = ['Sərt bazis', 'Metal bazis', 'Fərdi qaşıq'];
         const DATA_KLAMMER = ['Acril', 'Neylon', 'Asetal', 'Ortodontik', 'Qızıl', 'Titan'];
 
-        let appData;
-        try {
-            let possibleKeys = ['aclab_store', 'aclab_store_backup', 'aclab_store_v1.2'];
-            for (let i = 0; i < localStorage.length; i++) {
-                let k = localStorage.key(i);
-                if (k && k.includes('aclab') && !possibleKeys.includes(k)) {
-                    possibleKeys.push(k);
-                }
-            }
+        /* ================= BAZANIN YÜKLƏNMƏSİ ================= */
+        function isValidStore(parsed) {
+            return parsed && typeof parsed === 'object' && Array.isArray(parsed.jobs);
+        }
 
-            let bestData = null;
-            let maxJobs = -1;
-
-            possibleKeys.forEach(k => {
-                let val = localStorage.getItem(k);
-                if (val) {
+        function loadStoreFromStorage() {
+            try {
+                // 1) Əsas açar həmişə üstündür (silinmiş məlumat köhnə açardan geri qayıtmasın)
+                let mainRaw = localStorage.getItem('aclab_store');
+                if (mainRaw) {
                     try {
-                        let parsed = JSON.parse(val);
-                        if (parsed && Array.isArray(parsed.jobs)) {
-                            if (parsed.jobs.length > maxJobs) {
+                        let parsedMain = JSON.parse(mainRaw);
+                        if (isValidStore(parsedMain)) return parsedMain;
+                    } catch (err) {}
+                }
+
+                // 2) Əsas açar yoxdursa və ya zədəlidirsə - ən çox işi olan köhnə nüsxə
+                let possibleKeys = ['aclab_store_backup', 'aclab_store_v1.2'];
+                for (let i = 0; i < localStorage.length; i++) {
+                    let k = localStorage.key(i);
+                    if (k && k.indexOf('aclab') === 0 && k !== 'aclab_store' && k.indexOf('aclab_privacy') !== 0 &&
+                        k.indexOf('aclab_backup_dismissed') !== 0 && k.indexOf('aclab_last_backup_date') !== 0 && !possibleKeys.includes(k)) {
+                        possibleKeys.push(k);
+                    }
+                }
+                let bestData = null;
+                let maxJobs = -1;
+                possibleKeys.forEach(k => {
+                    let val = localStorage.getItem(k);
+                    if (val) {
+                        try {
+                            let parsed = JSON.parse(val);
+                            if (isValidStore(parsed) && parsed.jobs.length > maxJobs) {
                                 maxJobs = parsed.jobs.length;
                                 bestData = parsed;
                             }
-                        }
-                    } catch(err) {}
-                }
-            });
-
-            appData = bestData;
-        } catch(e) {
-            appData = null;
+                        } catch (err) {}
+                    }
+                });
+                return bestData;
+            } catch (e) {
+                return null;
+            }
         }
 
-        if (!appData || typeof appData !== 'object' || !Array.isArray(appData.jobs)) {
-            appData = {
+        function removeAllStoreKeys() {
+            let toRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                let k = localStorage.key(i);
+                if (k && k.indexOf('aclab_store') === 0) toRemove.push(k);
+            }
+            toRemove.forEach(k => localStorage.removeItem(k));
+        }
+
+        function createDefaultData() {
+            return {
                 profileName: 'A.Cəfərli',
                 user: 'admin',
                 pass: '123',
@@ -1447,6 +1508,9 @@
             };
         }
 
+        let appData = loadStoreFromStorage();
+        if (!appData) appData = createDefaultData();
+
         if (!appData.profileName) appData.profileName = 'A.Cəfərli';
         if (!appData.user) appData.user = 'admin';
         if (!appData.pass) appData.pass = '123';
@@ -1457,7 +1521,6 @@
                 if (appData.materials[k] === undefined) appData.materials[k] = v;
             });
         }
-
         if (!Array.isArray(appData.doctors)) appData.doctors = [];
         if (!Array.isArray(appData.jobs)) appData.jobs = [];
         if (!Array.isArray(appData.payments)) appData.payments = [];
@@ -1467,15 +1530,16 @@
                 let jsonStr = JSON.stringify(appData);
                 localStorage.setItem('aclab_store', jsonStr);
                 localStorage.setItem('aclab_store_backup', jsonStr);
-            } catch(e) {
+            } catch (e) {
                 console.error("Yadda saxlama xətası:", e);
             }
         }
-        
+
         saveStore();
 
+        /* ================= VƏZİYYƏT ================= */
         let activeScreen = 'screen-login';
-        let currentPeriod = 'ay';
+        let currentPeriod = 'gun';          // HTML-dəki "active" düymə ilə uyğunlaşdırıldı
         let currentJobFilter = null;
         let selectedCalendarDate = '';
         let pendingAiAction = null;
@@ -1519,7 +1583,7 @@
             if (passInp) passInp.value = '';
             if (cardTitleEl) cardTitleEl.innerText = appData.profileName || 'A.Cəfərli';
             if (avatarEl) {
-                let initials = (appData.profileName || 'AC').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                let initials = (appData.profileName || 'AC').split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase();
                 avatarEl.innerText = initials || 'AC';
             }
         }
@@ -1615,7 +1679,7 @@
         function initHistoryState() {
             history.replaceState({ screen: 'screen-login' }, '');
 
-            window.addEventListener('popstate', (event) => {
+            window.addEventListener('popstate', () => {
                 if (activeScreen === 'screen-login') {
                     history.pushState({ screen: 'screen-login' }, '');
                     return;
@@ -1629,6 +1693,7 @@
                     closeNotificationsModal();
                     let avansModal = document.getElementById('avans-confirm-modal');
                     if (avansModal) avansModal.classList.add('hidden');
+                    avansCallback = null;
                     history.pushState({ screen: activeScreen }, '');
                     return;
                 }
@@ -1686,11 +1751,17 @@
             }
         }
 
-        function getDueNotificationsCount() {
+        function isBackupPending() {
+            return localStorage.getItem('aclab_backup_dismissed') !== localDateStr();
+        }
+
+        function getDueJobs() {
             let now = new Date();
-            let dueJobs = appData.jobs.filter(j => j.alarm && new Date(j.alarm) <= now && j.stage !== 'Tehvil' && !j.dismissed);
-            let backupPending = localStorage.getItem('aclab_backup_dismissed') !== new Date().toISOString().split('T')[0] && new Date().getHours() >= 0;
-            return dueJobs.length + (backupPending ? 1 : 0);
+            return appData.jobs.filter(j => j.alarm && new Date(j.alarm) <= now && j.stage !== 'Tehvil' && !j.dismissed);
+        }
+
+        function getDueNotificationsCount() {
+            return getDueJobs().length + (isBackupPending() ? 1 : 0);
         }
 
         function updateNotificationBadge() {
@@ -1700,10 +1771,8 @@
         }
 
         function openNotificationsModal() {
-            let now = new Date();
-            let dueJobs = appData.jobs.filter(j => j.alarm && new Date(j.alarm) <= now && j.stage !== 'Tehvil' && !j.dismissed);
-            let todayStr = now.toISOString().split('T')[0];
-            let backupPending = localStorage.getItem('aclab_backup_dismissed') !== todayStr;
+            let dueJobs = getDueJobs();
+            let backupPending = isBackupPending();
             let bodyHtml = '';
 
             if (backupPending) {
@@ -1714,7 +1783,7 @@
                             <div style="font-size:12px; color:var(--text-main);">Bazanın ehtiyat nüsxəsini yükləməmisiniz.</div>
                         </div>
                         <div style="display:flex; gap:6px;">
-                            <button type="button" class="btn btn-success" style="width:auto; padding:6px 10px; font-size:11px; margin-top:0;" onclick="exportDatabaseFile(); dismissBackupNotification()">📥 Yüklə</button>
+                            <button type="button" class="btn btn-success" style="width:auto; padding:6px 10px; font-size:11px; margin-top:0;" onclick="exportDatabaseFile(); openNotificationsModal()">📥 Yüklə</button>
                             <button type="button" class="btn btn-secondary" style="width:auto; padding:6px 10px; font-size:11px; margin-top:0;" onclick="dismissBackupNotification()" title="Bildirişi bağla">❌</button>
                         </div>
                     </div>
@@ -1728,12 +1797,12 @@
                     let alarmFormatted = j.alarm ? j.alarm.replace('T', ' ') : 'Yoxdur';
                     bodyHtml += `
                         <div style="padding:10px; background:var(--stat-bg); border:1px solid var(--border-color); border-radius:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                            <div style="cursor:pointer; flex:1;" onclick="closeNotificationsModal(); viewJobDetails('${j.id}')">
-                                <div style="font-weight:bold; color:var(--primary); margin-bottom:2px;">${i+1}. 👤 Pasient: ${j.patient}</div>
-                                <div style="font-size:12px; color:var(--text-main);">Həkim: <b>${j.doctor}</b></div>
-                                <div style="font-size:11px; color:var(--warning); margin-top:4px;">Tarix/Saat: ${alarmFormatted} ➔</div>
+                            <div style="cursor:pointer; flex:1;" onclick="closeNotificationsModal(); viewJobDetails(${jsArg(j.id)})">
+                                <div style="font-weight:bold; color:var(--primary); margin-bottom:2px;">${i+1}. 👤 Pasient: ${escapeHtml(j.patient)}</div>
+                                <div style="font-size:12px; color:var(--text-main);">Həkim: <b>${escapeHtml(j.doctor)}</b></div>
+                                <div style="font-size:11px; color:var(--warning); margin-top:4px;">Tarix/Saat: ${escapeHtml(alarmFormatted)} ➔</div>
                             </div>
-                            <button type="button" class="btn btn-danger" style="width:auto; padding:6px 10px; font-size:11px; margin-top:0;" onclick="dismissNotification('${j.id}')" title="Bildirişi ləğv et">❌ Ləğv et</button>
+                            <button type="button" class="btn btn-danger" style="width:auto; padding:6px 10px; font-size:11px; margin-top:0;" onclick="dismissNotification(${jsArg(j.id)})" title="Bildirişi ləğv et">❌ Ləğv et</button>
                         </div>
                     `;
                 });
@@ -1746,8 +1815,7 @@
         }
 
         function dismissBackupNotification() {
-            let todayStr = new Date().toISOString().split('T')[0];
-            localStorage.setItem('aclab_backup_dismissed', todayStr);
+            localStorage.setItem('aclab_backup_dismissed', localDateStr());
             updateNotificationBadge();
             openNotificationsModal();
         }
@@ -1801,14 +1869,14 @@
                 let now = new Date();
                 if (now.getHours() === 0 && now.getMinutes() === 0) {
                     let lastBackupDate = localStorage.getItem('aclab_last_backup_date');
-                    let todayStr = now.toISOString().split('T')[0];
+                    let todayStr = localDateStr(now);
 
                     if (lastBackupDate !== todayStr) {
                         localStorage.setItem('aclab_last_backup_date', todayStr);
                         localStorage.removeItem('aclab_backup_dismissed');
                         playAlarmSound();
                         updateNotificationBadge();
-                        
+
                         if ("Notification" in window && Notification.permission === "granted") {
                             new Notification("🌙 ACLab Gecə Nüsxəsi", {
                                 body: "Gecə saat 12:00-dır. Zəhmət olmasa bazanın ehtiyat nüsxəsini yükləyin."
@@ -1816,7 +1884,7 @@
                         }
                     }
                 }
-            }, 60000);
+            }, 30000);
         }
 
         function navTo(screenId, pushHistory = true) {
@@ -1853,8 +1921,8 @@
             }
         }
 
-        function doLogout() { 
-            navTo('screen-login'); 
+        function doLogout() {
+            navTo('screen-login');
             let passInput = document.getElementById('login-pass');
             if (passInput) passInput.value = '';
             history.replaceState({ screen: 'screen-login' }, '');
@@ -1862,17 +1930,17 @@
 
         function exportDatabaseFile() {
             try {
-                let dateStr = new Date().toISOString().split('T')[0];
+                let dateStr = localDateStr();
                 let dataStr = JSON.stringify(appData, null, 2);
                 let blob = new Blob([dataStr], { type: 'application/json' });
                 let url = URL.createObjectURL(blob);
-                
+
                 let downloadAnchor = document.createElement('a');
                 downloadAnchor.href = url;
                 downloadAnchor.download = `ACLab_Backup_${dateStr}.json`;
                 document.body.appendChild(downloadAnchor);
                 downloadAnchor.click();
-                
+
                 setTimeout(() => {
                     document.body.removeChild(downloadAnchor);
                     URL.revokeObjectURL(url);
@@ -1919,7 +1987,7 @@
                     } else {
                         alert('❌ Xəta: Seçdiyiniz fayl düzgün ACLab baza formatında deyil!');
                     }
-                } catch(err) {
+                } catch (err) {
                     alert('❌ Xəta: Fayl oxunmadı və ya zədələnib: ' + err.message);
                 }
                 event.target.value = '';
@@ -1952,6 +2020,7 @@
                 appData.payments = appData.payments.filter(p => p.doctor !== docName);
                 saveStore();
                 renderControlPanel();
+                updateNotificationBadge();
                 alert(`✅ "${docName}" həkiminə aid bütün məlumatlar silindi!`);
             }
         }
@@ -1962,95 +2031,97 @@
                 appData.payments = [];
                 saveStore();
                 renderControlPanel();
-                alert('✅ Bütün pasient və iş siyahısı təmizləndi!');
+                updateNotificationBadge();
+                alert('✅ Bütün pasient və iş siyahısı təmizlənib!');
             }
         }
 
         function clearAllDatabasePrompt() {
             if (confirm('🚨 DİQQƏT! BÜTÜN BAZA (Həkimlər, pasientlər, ödənişlər, şifrələr) TAMAMİLƏ SIFIRLANACAQ! Əminsinizmi?')) {
                 if (confirm('Son xəbərdarlıq: Bütün məlumatlarınız silinəcək. Davam etmək istəyirsiniz?')) {
-                    localStorage.removeItem('aclab_store');
-                    localStorage.removeItem('aclab_store_backup');
-                    appData = {
-                        profileName: 'A.Cəfərli',
-                        user: 'admin',
-                        pass: '123',
-                        email: '',
-                        secretWord: '',
-                        materials: {...DEFAULT_MATERIALS},
-                        doctors: [
-                            { name: 'Dr. Efrail', phone: '' },
-                            { name: 'Dr. Anar', phone: '' }
-                        ],
-                        jobs: [],
-                        payments: []
-                    };
+                    removeAllStoreKeys();      // bütün aclab_store* açarları silinir
+                    appData = createDefaultData();
                     saveStore();
                     updateProfileUI();
+                    updateNotificationBadge();
                     navTo('screen-home');
                     alert('✅ Baza tamamilə sıfırlandı.');
                 }
             }
         }
 
-        function calculateDetailedMaterialCost(topItems, botItems) {
-            let mats = appData.materials || DEFAULT_MATERIALS;
-            let breakdown = [];
-            let total = 0;
+        /* ================= MATERIAL XƏRCİ ================= */
+        function matPrice(key) {
+            let mats = appData.materials || {};
+            let v = mats[key];
+            if (v === undefined || v === null || v === '' || isNaN(Number(v))) v = DEFAULT_MATERIALS[key];
+            return formatMoney(v || 0);
+        }
 
-            let addJawCost = (jawName) => {
-                let jawItems = [
-                    { name: "Gips", val: formatMoney(mats["Gips"] || 6) },
-                    { name: "Mum", val: formatMoney(mats["Mum"] || 2) },
-                    { name: "Qarnitur (dişlər)", val: formatMoney(mats["Qarnitur (dişlər)"] || 6) },
-                    { name: "Plastmas", val: formatMoney(mats["Plastmas"] || 2.8) },
-                    { name: "Fərdi qaşıq", val: formatMoney(mats["Fərdi qaşıq"] || 2) },
-                    { name: "İzolyasiya", val: formatMoney(mats["İzolyasiya"] || 0.48) },
-                    { name: "Cilalama pastası", val: formatMoney(mats["Cilalama pastası"] || 1) },
-                    { name: "Polirovka rezini", val: formatMoney(mats["Polirovka rezini"] || 0.3) }
-                ];
-                
-                let jawSum = 0;
-                let itemsList = [];
-                jawItems.forEach(item => {
-                    jawSum += item.val;
-                    itemsList.push(item);
-                });
-                total += jawSum;
-                breakdown.push({ jaw: jawName, baseItems: itemsList, jawSum: formatMoney(jawSum) });
+        function emptySelection() {
+            return { protez: [], tamir: [], elaveler: [], klammer: [] };
+        }
+
+        function selectionFromJob(j, jaw) {
+            let p = jaw === 'top' ? 'top' : 'bot';
+            return {
+                protez: j[p + 'Protez'] || [],
+                tamir: j[p + 'Tamir'] || [],
+                elaveler: j[p + 'Elaveler'] || [],
+                klammer: j[p + 'Klammer'] || []
             };
+        }
 
-            let topHasProtez = topItems.some(i => DATA_PROTEZ.includes(i));
-            let botHasProtez = botItems.some(i => DATA_PROTEZ.includes(i));
+        function getFormSelection(jaw) {
+            let p = jaw === 'top' ? 'top' : 'bot';
+            return {
+                protez: getCheckedValues(p + '-protez-boxes'),
+                tamir: getCheckedValues(p + '-tamir-boxes'),
+                elaveler: getCheckedValues(p + '-elaveler-boxes'),
+                klammer: getCheckedValues(p + '-klammer-boxes')
+            };
+        }
 
-            if (topHasProtez) {
-                addJawCost("Üst Çənə (Baza Standartları)");
-            }
-            if (botHasProtez) {
-                addJawCost("Alt Çənə (Baza Standartları)");
-            }
-
+        function calculateDetailedMaterialCost(topSel, botSel) {
+            let breakdown = [];
             let extraItemsList = [];
+            let total = 0;
             let extraSum = 0;
 
-            topItems.forEach(item => {
-                if (item !== 'Sadə' && item !== 'Tam' && item !== 'Hissəvi') {
-                    let cost = formatMoney(mats[item] || 0);
-                    if (cost > 0) {
-                        extraSum += cost;
-                        extraItemsList.push({ name: `Üst: ${item}`, val: cost });
-                    }
-                }
-            });
+            [['Üst', topSel], ['Alt', botSel]].forEach(([label, sel]) => {
+                let hasProtez = sel.protez.length > 0;
 
-            botItems.forEach(item => {
-                if (item !== 'Sadə' && item !== 'Tam' && item !== 'Hissəvi') {
-                    let cost = formatMoney(mats[item] || 0);
+                if (hasProtez) {
+                    let jawSum = 0;
+                    let itemsList = [];
+                    BASE_MATERIAL_KEYS.forEach(key => {
+                        let val = matPrice(key);
+                        jawSum += val;
+                        itemsList.push({ name: key, val: val });
+                    });
+                    total += jawSum;
+                    breakdown.push({ jaw: `${label} Çənə (Baza Standartları)`, baseItems: itemsList, jawSum: formatMoney(jawSum) });
+                }
+
+                // Əlavə elementlər
+                let extras = [];
+                sel.protez.forEach(i => { if (!PLAIN_PROTEZ.includes(i)) extras.push(i); });
+                sel.tamir.forEach(i => extras.push(i));
+                sel.elaveler.forEach(i => {
+                    // Fərdi qaşıq baza xərcinə artıq daxildir - iki dəfə hesablanmasın
+                    if (i === 'Fərdi qaşıq' && hasProtez) return;
+                    extras.push(i);
+                });
+                // Klammer üçün ayrıca qiymət yoxdur (Neylon/Asetal protez qiyməti tutulmur)
+
+                extras.forEach(item => {
+                    let key = MATERIAL_ALIAS[item] || item;
+                    let cost = matPrice(key);
                     if (cost > 0) {
                         extraSum += cost;
-                        extraItemsList.push({ name: `Alt: ${item}`, val: cost });
+                        extraItemsList.push({ name: `${label}: ${item}`, val: cost });
                     }
-                }
+                });
             });
 
             total += extraSum;
@@ -2064,21 +2135,14 @@
         }
 
         function calculateJobMaterialCostForJob(j) {
-            let topItems = [...(j.topProtez||[]), ...(j.topTamir||[]), ...(j.topElaveler||[]), ...(j.topKlammer||[])];
-            let botItems = [...(j.botProtez||[]), ...(j.botTamir||[]), ...(j.botElaveler||[]), ...(j.botKlammer||[])];
-            return calculateDetailedMaterialCost(topItems, botItems).total;
-        }
-
-        function calculateMaterialCostForSelections(topItems, botItems) {
-            let res = calculateDetailedMaterialCost(topItems, botItems);
-            return res.total;
+            // Yeni yadda saxlanan işlərdə xərc o gün hesablanıb dondurulur
+            if (j.matFrozen && typeof j.materialCost === 'number') return formatMoney(j.materialCost);
+            return calculateDetailedMaterialCost(selectionFromJob(j, 'top'), selectionFromJob(j, 'bot')).total;
         }
 
         function calculateJobEstimatedCost() {
-            let topItems = [...getCheckedValues('top-protez-boxes'), ...getCheckedValues('top-tamir-boxes'), ...getCheckedValues('top-elaveler-boxes'), ...getCheckedValues('top-klammer-boxes')];
-            let botItems = [...getCheckedValues('bot-protez-boxes'), ...getCheckedValues('bot-tamir-boxes'), ...getCheckedValues('bot-elaveler-boxes'), ...getCheckedValues('bot-klammer-boxes')];
-
-            let matCost = formatMoney(calculateMaterialCostForSelections(topItems, botItems));
+            let detailed = calculateDetailedMaterialCost(getFormSelection('top'), getFormSelection('bot'));
+            let matCost = formatMoney(detailed.total);
             let priceVal = formatMoney(Number(document.getElementById('jf-price').value) || 0);
             let netProfit = formatMoney(priceVal - matCost);
 
@@ -2090,10 +2154,7 @@
         }
 
         function openMaterialDetailModal() {
-            let topItems = [...getCheckedValues('top-protez-boxes'), ...getCheckedValues('top-tamir-boxes'), ...getCheckedValues('top-elaveler-boxes'), ...getCheckedValues('top-klammer-boxes')];
-            let botItems = [...getCheckedValues('bot-protez-boxes'), ...getCheckedValues('bot-tamir-boxes'), ...getCheckedValues('bot-elaveler-boxes'), ...getCheckedValues('bot-klammer-boxes')];
-
-            let detailed = calculateDetailedMaterialCost(topItems, botItems);
+            let detailed = calculateDetailedMaterialCost(getFormSelection('top'), getFormSelection('bot'));
             let html = `<p style="margin-bottom:10px; font-weight:bold; color:var(--primary);">Ümumi Hesablanan Xərc: <span class="money-val">${formatMoney(detailed.total)} AZN</span></p>`;
 
             if (detailed.breakdown.length === 0 && detailed.extraItems.length === 0) {
@@ -2101,10 +2162,10 @@
             } else {
                 detailed.breakdown.forEach(b => {
                     html += `<div style="background:var(--stat-bg); padding:10px; border-radius:10px; margin-bottom:8px; border:1px solid var(--border-color);">
-                        <div style="font-weight:bold; color:var(--warning); margin-bottom:6px;">${b.jaw} (<span class="money-val">${formatMoney(b.jawSum)} AZN</span>):</div>`;
+                        <div style="font-weight:bold; color:var(--warning); margin-bottom:6px;">${escapeHtml(b.jaw)} (<span class="money-val">${formatMoney(b.jawSum)} AZN</span>):</div>`;
                     b.baseItems.forEach(bi => {
                         html += `<div style="display:flex; justify-content:space-between; font-size:12px; padding:2px 0; border-bottom:1px dashed rgba(255,255,255,0.05);">
-                            <span>• ${bi.name}</span>
+                            <span>• ${escapeHtml(bi.name)}</span>
                             <span class="money-val">${formatMoney(bi.val)} AZN</span>
                         </div>`;
                     });
@@ -2116,7 +2177,7 @@
                         <div style="font-weight:bold; color:var(--neon-cyan); margin-bottom:6px;">Əlavə Seçilmiş Elementlər (<span class="money-val">${formatMoney(detailed.extraSum)} AZN</span>):</div>`;
                     detailed.extraItems.forEach(ei => {
                         html += `<div style="display:flex; justify-content:space-between; font-size:12px; padding:2px 0; border-bottom:1px dashed rgba(255,255,255,0.05);">
-                            <span>• ${ei.name}</span>
+                            <span>• ${escapeHtml(ei.name)}</span>
                             <span class="money-val">${formatMoney(ei.val)} AZN</span>
                         </div>`;
                     });
@@ -2141,15 +2202,14 @@
             let inputs = container.querySelectorAll('input[data-mat-key]');
             inputs.forEach(inp => {
                 let key = inp.dataset.matKey;
-                let val = formatMoney(Number(inp.value));
-                if (!isNaN(val)) {
-                    appData.materials[key] = val;
-                }
+                if (inp.value === '' || isNaN(Number(inp.value))) return;
+                appData.materials[key] = formatMoney(Number(inp.value));
             });
             saveStore();
             alert('✅ Material qiymətləri uğurla yadda saxlandı!');
         }
 
+        /* ================= FORMA ELEMENTLƏRİ ================= */
         function buildCheckboxGroup(containerId, prefix, items) {
             let container = document.getElementById(containerId);
             if (!container) return;
@@ -2158,7 +2218,7 @@
                 let id = `${prefix}_${idx}`;
                 let label = document.createElement('label');
                 label.className = 'checkbox-item';
-                label.innerHTML = `<input type="checkbox" id="${id}" value="${item}" onchange="calculateJobEstimatedCost()"> ${item}`;
+                label.innerHTML = `<input type="checkbox" id="${id}" value="${escapeHtml(item)}" onchange="calculateJobEstimatedCost()"> ${escapeHtml(item)}`;
                 container.appendChild(label);
             });
         }
@@ -2172,30 +2232,78 @@
             let container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = '';
-            for (let i = 8; i >= 1; i--) { container.appendChild(createToothBtn(jawType, i)); }
+            for (let i = 8; i >= 1; i--) { container.appendChild(createToothBtn(jawType, i, 'L')); }
             let div = document.createElement('div');
             div.className = 'tooth-divider';
             container.appendChild(div);
-            for (let i = 1; i <= 8; i++) { container.appendChild(createToothBtn(jawType, i)); }
+            for (let i = 1; i <= 8; i++) { container.appendChild(createToothBtn(jawType, i, 'R')); }
         }
 
-        function createToothBtn(jawType, num) {
+        // Sol və sağ tərəfin eyni nömrəli dişləri artıq ayrı-ayrı açarla (L3 / R3) saxlanır
+        function createToothBtn(jawType, num, side) {
             let b = document.createElement('button');
             b.type = 'button';
             b.className = 'tooth-btn';
             b.innerText = num;
             b.dataset.jaw = jawType;
             b.dataset.num = num;
+            b.dataset.side = side;
+            b.dataset.key = side + num;
             b.onclick = function() { this.classList.toggle('selected'); };
             return b;
         }
 
+        function formatTeeth(arr) {
+            if (!Array.isArray(arr) || arr.length === 0) return '';
+            let left = [], right = [], legacy = [];
+            arr.forEach(v => {
+                let s = String(v);
+                if (/^L\d$/.test(s)) left.push(s.slice(1));
+                else if (/^R\d$/.test(s)) right.push(s.slice(1));
+                else legacy.push(s);
+            });
+            let parts = [];
+            if (left.length) parts.push('Sol: ' + left.join(', '));
+            if (right.length) parts.push('Sağ: ' + right.join(', '));
+            if (legacy.length) parts.push('Dişlər: ' + legacy.join(', '));
+            return parts.join(' | ');
+        }
+
+        function restoreTeeth(jawType, arr) {
+            if (!Array.isArray(arr)) return;
+            arr.forEach(v => {
+                let s = String(v);
+                if (/^[LR]\d$/.test(s)) {
+                    let b = document.querySelector(`.tooth-btn[data-jaw="${jawType}"][data-key="${s}"]`);
+                    if (b) b.classList.add('selected');
+                } else {
+                    // köhnə qeyd (yalnız rəqəm): tərəf bilinmir, hər iki tərəfdə işarələnir
+                    document.querySelectorAll(`.tooth-btn[data-jaw="${jawType}"][data-num="${s}"]`).forEach(b => b.classList.add('selected'));
+                }
+            });
+        }
+
+        /* ================= DÖVR / FİLTR / TƏQVİM ================= */
         function setPeriod(p) {
             currentPeriod = p;
             document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
             let btnEl = document.getElementById('p-' + p);
             if (btnEl) btnEl.classList.add('active');
             renderHome();
+        }
+
+        function isInCurrentPeriod(dateLike) {
+            let now = new Date();
+            let d = new Date(dateLike);
+            if (isNaN(d.getTime())) return false;
+            if (currentPeriod === 'gun') return d.toDateString() === now.toDateString();
+            if (currentPeriod === 'ay') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            if (currentPeriod === 'il') return d.getFullYear() === now.getFullYear();
+            return true;
+        }
+
+        function getPeriodJobs() {
+            return appData.jobs.filter(j => isInCurrentPeriod(j.createdAt || j.date));
         }
 
         function toggleJobFilter(filterType) {
@@ -2280,7 +2388,7 @@
 
                 let dayDiv = document.createElement('div');
                 dayDiv.className = 'cal-day';
-                
+
                 let dayNumSpan = document.createElement('span');
                 dayNumSpan.innerText = day;
                 dayDiv.appendChild(dayNumSpan);
@@ -2323,32 +2431,48 @@
 
         function openAddJobForSelectedDate() {
             if (!selectedCalendarDate) {
-                let todayStr = new Date().toISOString().split('T')[0];
-                selectedCalendarDate = todayStr;
+                selectedCalendarDate = localDateStr();
             }
+            let chosenDate = selectedCalendarDate;
             openAddJob();
             let delEl = document.getElementById('jf-delivery-date');
-            if (delEl) delEl.value = selectedCalendarDate;
+            if (delEl) delEl.value = chosenDate;
         }
 
+        /* ================= HESAB / BALANS ================= */
         function getDoctorBalance(docName) {
             let docJobsPrice = appData.jobs.filter(j => j.doctor === docName).reduce((a, b) => a + formatMoney(b.price || 0), 0);
             let totalPaid = appData.payments.filter(p => p.doctor === docName).reduce((a, b) => a + formatMoney(b.amount || 0), 0);
             return formatMoney(docJobsPrice - totalPaid);
         }
 
+        // Ödənişi qeydə alır və həkimin işlərinə böləcək; artıq qalan məbləğ avansdır
+        function applyPayment(doc, amount) {
+            appData.payments.push({ doctor: doc, amount: amount, date: new Date().toISOString() });
+
+            let remPay = amount;
+            let docJobs = appData.jobs.filter(j => j.doctor === doc);
+            for (let job of docJobs) {
+                let debt = formatMoney(formatMoney(job.price || 0) - (job.paidAmount || 0));
+                if (debt > 0) {
+                    if (remPay >= debt) {
+                        remPay = formatMoney(remPay - debt);
+                        job.paidAmount = formatMoney(job.price);
+                    } else {
+                        job.paidAmount = formatMoney((job.paidAmount || 0) + remPay);
+                        remPay = 0;
+                        break;
+                    }
+                }
+            }
+            saveStore();
+            return remPay;
+        }
+
         function openStatDetailModal(type) {
             let title = '';
             let bodyHtml = '';
-            let now = new Date();
-
-            let filtered = appData.jobs.filter(j => {
-                let d = new Date(j.createdAt || j.date);
-                if (currentPeriod === 'gun') return d.toDateString() === now.toDateString();
-                if (currentPeriod === 'ay') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-                if (currentPeriod === 'il') return d.getFullYear() === now.getFullYear();
-                return true;
-            });
+            let filtered = getPeriodJobs();
 
             if (type === 'tehvil') {
                 title = '📦 Təhvil Verilmiş İşlər';
@@ -2360,8 +2484,8 @@
                 else {
                     list.forEach((j, i) => {
                         let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
-                        bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); viewJobDetails('${j.id}')">
-                            ${i+1}. <b>${j.patient}</b> (${j.doctor}) - <span class="money-val">${formatMoney(j.price)} AZN</span> (${jNet} AZN) ➔
+                        bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); viewJobDetails(${jsArg(j.id)})">
+                            ${i+1}. <b>${escapeHtml(j.patient)}</b> (${escapeHtml(j.doctor)}) - <span class="money-val">${formatMoney(j.price)} AZN</span> (${jNet} AZN) ➔
                         </div>`;
                     });
                 }
@@ -2375,8 +2499,8 @@
                 else {
                     list.forEach((j, i) => {
                         let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
-                        bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); viewJobDetails('${j.id}')">
-                            ${i+1}. <b>${j.patient}</b> (${j.doctor}) - Mərhələ: <b>${j.stage}</b> (<span class="money-val">${formatMoney(j.price)} AZN</span>, ${jNet} AZN) ➔
+                        bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); viewJobDetails(${jsArg(j.id)})">
+                            ${i+1}. <b>${escapeHtml(j.patient)}</b> (${escapeHtml(j.doctor)}) - Mərhələ: <b>${escapeHtml(j.stage)}</b> (<span class="money-val">${formatMoney(j.price)} AZN</span>, ${jNet} AZN) ➔
                         </div>`;
                     });
                 }
@@ -2388,19 +2512,22 @@
                 else {
                     list.forEach((j, i) => {
                         let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
-                        bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); viewJobDetails('${j.id}')">
-                            ${i+1}. <b>${j.patient}</b> (${j.doctor}) - Mərhələ: ${j.stage} (<span class="money-val">${formatMoney(j.price)} AZN</span>, ${jNet} AZN) ➔
+                        bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); viewJobDetails(${jsArg(j.id)})">
+                            ${i+1}. <b>${escapeHtml(j.patient)}</b> (${escapeHtml(j.doctor)}) - Mərhələ: ${escapeHtml(j.stage)} (<span class="money-val">${formatMoney(j.price)} AZN</span>, ${jNet} AZN) ➔
                         </div>`;
                     });
                 }
             } else if (type === 'qazanilan') {
                 title = '💰 Qazanılan (Daxil olan Ödənişlər)';
-                if (appData.payments.length === 0) bodyHtml = '<p style="color:var(--text-sub);">Heç bir ödəniş qeydə alınmayıb.</p>';
+                let list = appData.payments.filter(p => isInCurrentPeriod(p.date));
+                let sum = formatMoney(list.reduce((a, b) => a + formatMoney(b.amount || 0), 0));
+                bodyHtml = `<p style="margin-bottom:10px; font-weight:bold; color:var(--success);">Cəmi: ${list.length} ödəniş | <span class="money-val">${sum} AZN</span></p>`;
+                if (list.length === 0) bodyHtml += '<p style="color:var(--text-sub);">Bu dövrdə heç bir ödəniş qeydə alınmayıb.</p>';
                 else {
-                    appData.payments.forEach((p, i) => {
+                    list.forEach((p, i) => {
                         let dt = new Date(p.date).toLocaleDateString();
                         bodyHtml += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color);">
-                            ${i+1}. <b>${p.doctor}</b> - <span style="color:var(--success); font-weight:bold;" class="money-val">${formatMoney(p.amount)} AZN</span> (${dt})
+                            ${i+1}. <b>${escapeHtml(p.doctor)}</b> - <span style="color:var(--success); font-weight:bold;" class="money-val">${formatMoney(p.amount)} AZN</span> (${dt})
                         </div>`;
                     });
                 }
@@ -2421,8 +2548,8 @@
                     let doc = docObj.name;
                     let bal = getDoctorBalance(doc);
                     if (bal > 0) {
-                        htmlDetails += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); openDoctorAccount('${doc}')">
-                            <b>${doc}</b>: <span style="color:var(--danger); font-weight:bold;" class="money-val">${formatMoney(bal)} AZN Borc</span> ➔
+                        htmlDetails += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); openDoctorAccount(${jsArg(doc)})">
+                            <b>${escapeHtml(doc)}</b>: <span style="color:var(--danger); font-weight:bold;" class="money-val">${formatMoney(bal)} AZN Borc</span> ➔
                         </div>`;
                     }
                 });
@@ -2434,8 +2561,8 @@
                     let doc = docObj.name;
                     let bal = getDoctorBalance(doc);
                     if (bal < 0) {
-                        htmlDetails += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); openDoctorAccount('${doc}')">
-                            <b>${doc}</b>: <span style="color:var(--success); font-weight:bold;" class="money-val">${formatMoney(Math.abs(bal))} AZN Avans</span> ➔
+                        htmlDetails += `<div style="padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeStatDetailModal(); openDoctorAccount(${jsArg(doc)})">
+                            <b>${escapeHtml(doc)}</b>: <span style="color:var(--success); font-weight:bold;" class="money-val">${formatMoney(Math.abs(bal))} AZN Avans</span> ➔
                         </div>`;
                     }
                 });
@@ -2457,23 +2584,18 @@
 
         function renderHome() {
             let now = new Date();
-            let filtered = appData.jobs.filter(j => {
-                let d = new Date(j.createdAt || j.date);
-                if (currentPeriod === 'gun') return d.toDateString() === now.toDateString();
-                if (currentPeriod === 'ay') return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-                if (currentPeriod === 'il') return d.getFullYear() === now.getFullYear();
-                return true;
-            });
+            let filtered = getPeriodJobs();
 
-            let delCount = 0, delSum = 0, delNet = 0, pendCount = 0, pendSum = 0, pendNet = 0, totalEarned = 0, periodTurnover = 0, periodMatCost = 0;
+            let delCount = 0, delSum = 0, delNet = 0, pendCount = 0, pendSum = 0, pendNet = 0, periodTurnover = 0, periodMatCost = 0;
             let probCount = appData.jobs.filter(j => j.isProblematic).length;
+
+            // Daxil olan qazanc = seçilmiş dövrdə qəbul edilmiş ödənişlər
+            let totalEarned = formatMoney(appData.payments.filter(p => isInCurrentPeriod(p.date)).reduce((a, b) => a + formatMoney(b.amount || 0), 0));
 
             filtered.forEach(j => {
                 let pr = formatMoney(j.price || 0);
-                let paid = formatMoney(j.paidAmount || 0);
                 let mat = calculateJobMaterialCostForJob(j);
                 let net = formatMoney(pr - mat);
-                totalEarned = formatMoney(totalEarned + paid);
                 periodTurnover = formatMoney(periodTurnover + pr);
                 periodMatCost = formatMoney(periodMatCost + mat);
                 if (j.stage === 'Tehvil') { delCount++; delSum = formatMoney(delSum + pr); delNet = formatMoney(delNet + net); }
@@ -2482,15 +2604,13 @@
 
             let periodNetProfit = formatMoney(periodTurnover - periodMatCost);
 
-            let todayStr = now.toISOString().split('T')[0];
-            let tomorrowObj = new Date();
-            tomorrowObj.setDate(now.getDate() + 1);
-            let tomorrowStr = tomorrowObj.toISOString().split('T')[0];
+            let todayStr = localDateStr(now);
+            let tomorrowStr = localDateStr(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1));
 
             let countToday = appData.jobs.filter(j => j.deliveryDate === todayStr || (j.alarm && j.alarm.startsWith(todayStr))).length;
             let countTomorrow = appData.jobs.filter(j => j.deliveryDate === tomorrowStr || (j.alarm && j.alarm.startsWith(tomorrowStr))).length;
             let countUrgent = appData.jobs.filter(j => j.isUrgent).length;
-            let countProblem = appData.jobs.filter(j => j.isProblematic).length;
+            let countProblem = probCount;
 
             let elCntToday = document.getElementById('cnt-today');
             let elCntTomorrow = document.getElementById('cnt-tomorrow');
@@ -2568,10 +2688,10 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--stat-bg); border:1px solid var(--border-color); border-radius:12px; margin-bottom:8px;">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <div>${dotsHtml}</div>
-                            <strong>${doc} <span style="color:var(--primary); font-size:12px;">(${docTotalCount}/${docTehvilCount})</span></strong>
+                            <strong>${escapeHtml(doc)} <span style="color:var(--primary); font-size:12px;">(${docTotalCount}/${docTehvilCount})</span></strong>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-warning" style="width:auto; padding:6px 12px; font-size:11px; margin-top:0;" onclick="openDoctorAccount('${doc}')">Həkim Hesabatı</button>
+                            <button type="button" class="btn btn-warning" style="width:auto; padding:6px 12px; font-size:11px; margin-top:0;" onclick="openDoctorAccount(${jsArg(doc)})">Həkim Hesabatı</button>
                         </div>
                     </div>
                 `;
@@ -2621,9 +2741,9 @@
                 let urgentBadge = j.isUrgent ? `<span style="color:var(--danger); font-weight:900; margin-left:6px;">🔥 TƏCİLİ</span>` : '';
                 let probBadge = j.isProblematic ? `<span style="color:var(--warning); font-weight:900; margin-left:6px;">⚠️ PROBLEMLİ</span>` : '';
                 jobsListHtml += `
-                    <div class="job-item ${isDone ? 'completed' : ''} ${j.isUrgent ? 'urgent' : ''} ${j.isProblematic ? 'problematic' : ''}" onclick="viewJobDetails('${j.id}')" style="cursor:pointer;">
-                        <div class="job-header"><span>👤 ${j.patient} ${urgentBadge} ${probBadge}</span><span class="badge">${j.doctor}</span></div>
-                        <div class="job-details">Mərhələ: <b>${j.stage}</b> | Tarix: <b>${j.deliveryDate || 'Yoxdur'}</b> | Qazanc: <b class="money-val">${formatMoney(j.price)} AZN</b> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) | Borc: <b style="color:var(--danger);" class="money-val">${rem} AZN</b></div>
+                    <div class="job-item ${isDone ? 'completed' : ''} ${j.isUrgent ? 'urgent' : ''} ${j.isProblematic ? 'problematic' : ''}" onclick="viewJobDetails(${jsArg(j.id)})" style="cursor:pointer;">
+                        <div class="job-header"><span>👤 ${escapeHtml(j.patient)} ${urgentBadge} ${probBadge}</span><span class="badge">${escapeHtml(j.doctor)}</span></div>
+                        <div class="job-details">Mərhələ: <b>${escapeHtml(j.stage)}</b> | Tarix: <b>${escapeHtml(j.deliveryDate || 'Yoxdur')}</b> | Qazanc: <b class="money-val">${formatMoney(j.price)} AZN</b> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) | Borc: <b style="color:var(--danger);" class="money-val">${rem} AZN</b></div>
                     </div>
                 `;
             });
@@ -2635,7 +2755,7 @@
             let delJobsList = appData.jobs.filter(j => j.stage === 'Tehvil');
             let pendJobsList = appData.jobs.filter(j => j.stage !== 'Tehvil');
             let probJobsList = appData.jobs.filter(j => j.isProblematic);
-            
+
             let delSum = formatMoney(delJobsList.reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let delNet = formatMoney(delJobsList.reduce((a, b) => a + formatMoney(formatMoney(b.price || 0) - calculateJobMaterialCostForJob(b)), 0));
             let pendSum = formatMoney(pendJobsList.reduce((a, b) => a + formatMoney(b.price || 0), 0));
@@ -2647,12 +2767,6 @@
 
             let avgJobVal = totalJobs > 0 ? formatMoney(totalTurnover / totalJobs) : 0;
             let avgJobNet = totalJobs > 0 ? formatMoney(totalNetProfit / totalJobs) : 0;
-            
-            let totalDebtSum = 0;
-            appData.doctors.forEach(d => {
-                let b = getDoctorBalance(d.name);
-                if (b > 0) totalDebtSum = formatMoney(totalDebtSum + b);
-            });
 
             document.getElementById('dash-del-count').innerText = `${delJobsList.length} iş`;
             document.getElementById('dash-del-sum').innerHTML = `${formatMoney(delSum)} AZN <span style="font-size:10px; color:var(--neon-cyan);">(${formatMoney(delNet)} AZN)</span>`;
@@ -2667,8 +2781,8 @@
             let urgentCount = appData.jobs.filter(j => j.isUrgent).length;
             let normalCount = totalJobs - urgentCount;
             let urgentPercent = totalJobs > 0 ? Math.round((urgentCount / totalJobs) * 100) : 0;
-            let normalPercent = 100 - urgentPercent;
-            
+            let normalPercent = totalJobs > 0 ? 100 - urgentPercent : 0;
+
             let workloadHtml = `
                 <div class="chart-bar-wrap">
                     <div class="chart-bar-info"><span>🔥 Təcili İşlər</span><span>${urgentCount} iş (${urgentPercent}%)</span></div>
@@ -2687,10 +2801,10 @@
                 let dTotal = dJobs.reduce((acc, j) => acc + formatMoney(j.price || 0), 0);
                 let dPaid = appData.payments.filter(p => p.doctor === d.name).reduce((acc, p) => acc + formatMoney(p.amount || 0), 0);
                 let disciplineRate = dTotal > 0 ? Math.min(100, Math.round((dPaid / dTotal) * 100)) : 100;
-                
+
                 disciplineHtml += `
                     <div class="chart-bar-wrap">
-                        <div class="chart-bar-info"><span>${d.name} (Ödəniş intizamı)</span><span>${disciplineRate}%</span></div>
+                        <div class="chart-bar-info"><span>${escapeHtml(d.name)} (Ödəniş intizamı)</span><span>${disciplineRate}%</span></div>
                         <div class="chart-bar-bg"><div class="chart-bar-fill" style="width: ${disciplineRate}%; background: linear-gradient(90deg, var(--success), var(--neon-cyan));"></div></div>
                     </div>
                 `;
@@ -2706,14 +2820,14 @@
                 if (Array.isArray(j.topProtez)) j.topProtez.forEach(p => { if (protezCounts[`Üst - ${p}`] !== undefined) protezCounts[`Üst - ${p}`]++; });
                 if (Array.isArray(j.botProtez)) j.botProtez.forEach(p => { if (protezCounts[`Alt - ${p}`] !== undefined) protezCounts[`Alt - ${p}`]++; });
             });
-            let sortedProtez = Object.entries(protezCounts).filter(item => item[1] > 0).sort((a,b) => b[1] - a[1]);
+            let sortedProtez = Object.entries(protezCounts).filter(item => item[1] > 0).sort((a, b) => b[1] - a[1]);
             let maxProtezCount = sortedProtez.length > 0 ? Math.max(...sortedProtez.map(item => item[1]), 1) : 1;
             let protezHtml = '';
             sortedProtez.forEach(([pName, pCnt]) => {
                 let pPct = Math.round((pCnt / maxProtezCount) * 100);
                 protezHtml += `
                     <div class="chart-bar-wrap">
-                        <div class="chart-bar-info"><span>🦷 ${pName}</span><span>${pCnt} dəfə</span></div>
+                        <div class="chart-bar-info"><span>🦷 ${escapeHtml(pName)}</span><span>${pCnt} dəfə</span></div>
                         <div class="chart-bar-bg"><div class="chart-bar-fill" style="width: ${pPct}%; background: var(--warning);"></div></div>
                     </div>
                 `;
@@ -2752,7 +2866,7 @@
                 docsHtml += `
                     <div class="chart-bar-wrap">
                         <div class="chart-bar-info">
-                            <span>${d.name} (${docJobs.length} iş)</span>
+                            <span>${escapeHtml(d.name)} (${docJobs.length} iş)</span>
                             <span class="money-val">${formatMoney(docSum)} AZN <span style="font-size:10px; color:var(--neon-cyan);">(${formatMoney(docNet)} AZN)</span></span>
                         </div>
                         <div class="chart-bar-bg">
@@ -2774,8 +2888,11 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 let dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 let daySum = formatMoney(appData.jobs.filter(job => {
-                    let jd = job.createdAt ? job.createdAt.split('T')[0] : (job.date ? job.date.split('T')[0] : '');
-                    return jd === dStr;
+                    let raw = job.createdAt || job.date;
+                    if (!raw) return false;
+                    let jdObj = new Date(raw);
+                    if (isNaN(jdObj.getTime())) return false;
+                    return localDateStr(jdObj) === dStr;     // yerli tarixə görə
                 }).reduce((acc, job) => acc + formatMoney(job.price || 0), 0));
                 if (daySum > maxDayVal) maxDayVal = daySum;
                 dailyData.push({ day: day, sum: daySum });
@@ -2783,7 +2900,7 @@
 
             let dailyChartHtml = '';
             dailyData.forEach(d => {
-                let hPercent = Math.max(10, Math.round((d.sum / maxDayVal) * 100));
+                let hPercent = d.sum > 0 ? Math.max(10, Math.round((d.sum / maxDayVal) * 100)) : 2;
                 dailyChartHtml += `
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end;" title="${d.day} ci gün: ${formatMoney(d.sum)} AZN">
                         <span style="font-size: 7px; color: var(--text-sub); margin-bottom: 2px;" class="money-val">${formatMoney(d.sum)}</span>
@@ -2812,7 +2929,7 @@
             }
 
             monthlyData.forEach(m => {
-                let hPercent = Math.max(12, Math.round((m.sum / maxMonthVal) * 100));
+                let hPercent = m.sum > 0 ? Math.max(12, Math.round((m.sum / maxMonthVal) * 100)) : 2;
                 monthlyChartHtml += `
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end;">
                         <span style="font-size: 9px; color: var(--text-sub); margin-bottom: 4px; font-weight: 700;" class="money-val">${formatMoney(m.sum)}</span>
@@ -2823,6 +2940,24 @@
             });
             let dMonth = document.getElementById('dash-monthly-chart');
             if (dMonth) dMonth.innerHTML = monthlyChartHtml;
+        }
+
+        /* ================= HƏKİM HESABATI ================= */
+        function filterJobsByPeriodKey(jobs, periodKey) {
+            let now = new Date();
+            return jobs.filter(j => {
+                let d = new Date(j.createdAt || j.date);
+                if (periodKey === '1month') {
+                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                } else if (periodKey === '6months') {
+                    let sixMonthsAgo = new Date();
+                    sixMonthsAgo.setMonth(now.getMonth() - 6);
+                    return d >= sixMonthsAgo;
+                } else if (periodKey === '1year') {
+                    return d.getFullYear() === now.getFullYear();
+                }
+                return true;
+            });
         }
 
         function openDoctorAccount(docName) {
@@ -2843,20 +2978,7 @@
             let allDocJobs = appData.jobs.filter(j => j.doctor === docName);
             let docPayments = appData.payments.filter(p => p.doctor === docName);
 
-            let now = new Date();
-            let filteredJobs = allDocJobs.filter(j => {
-                let d = new Date(j.createdAt || j.date);
-                if (periodKey === '1month') {
-                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-                } else if (periodKey === '6months') {
-                    let sixMonthsAgo = new Date();
-                    sixMonthsAgo.setMonth(now.getMonth() - 6);
-                    return d >= sixMonthsAgo;
-                } else if (periodKey === '1year') {
-                    return d.getFullYear() === now.getFullYear();
-                }
-                return true;
-            });
+            let filteredJobs = filterJobsByPeriodKey(allDocJobs, periodKey);
 
             let totalPrice = formatMoney(filteredJobs.reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let totalMatCost = formatMoney(filteredJobs.reduce((a, b) => a + calculateJobMaterialCostForJob(b), 0));
@@ -2866,7 +2988,7 @@
 
             let tehvilSum = formatMoney(filteredJobs.filter(j => j.stage === 'Tehvil').reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let tehvilNet = formatMoney(filteredJobs.filter(j => j.stage === 'Tehvil').reduce((a, b) => a + formatMoney(formatMoney(b.price || 0) - calculateJobMaterialCostForJob(b)), 0));
-            
+
             let tehvilsizSum = formatMoney(filteredJobs.filter(j => j.stage !== 'Tehvil').reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let tehvilsizNet = formatMoney(filteredJobs.filter(j => j.stage !== 'Tehvil').reduce((a, b) => a + formatMoney(formatMoney(b.price || 0) - calculateJobMaterialCostForJob(b)), 0));
 
@@ -2889,8 +3011,8 @@
                             <option value="all" ${periodKey==='all'?'selected':''}>Bu günə kimi (Hamısı)</option>
                         </select>
                     </div>
-                    <p><b>Həkim:</b> ${docName}</p>
-                    <p><b>Telefon:</b> ${docObj && docObj.phone ? docObj.phone : 'Qeyd edilməyib'}</p>
+                    <p><b>Həkim:</b> ${escapeHtml(docName)}</p>
+                    <p><b>Telefon:</b> ${docObj && docObj.phone ? escapeHtml(docObj.phone) : 'Qeyd edilməyib'}</p>
                     <p><b>Ümumi İş Sayı:</b> ${filteredJobs.length}</p>
                     <p><b>Ümumi Qazanc (Dövriyyə):</b> <span class="money-val">${formatMoney(totalPrice)} AZN</span> (<span style="color:var(--neon-cyan);">${formatMoney(totalNetProfit)} AZN</span>)</p>
                     <p><b>Material Xərci:</b> <span style="color:var(--danger);" class="money-val">${formatMoney(totalMatCost)} AZN</span></p>
@@ -2910,7 +3032,7 @@
             let whatsappWrap = document.getElementById('doc-modal-whatsapp-wrap');
             if (whatsappWrap) {
                 let pdfButtonHtml = `
-                    <button type="button" class="btn btn-pdf" style="margin-top:0; font-size:13px; font-weight:bold;" onclick="downloadDoctorPdfReport('${docName}')">
+                    <button type="button" class="btn btn-pdf" style="margin-top:0; font-size:13px; font-weight:bold;" onclick="downloadDoctorPdfReport(${jsArg(docName)})">
                         📥 Bu Həkimin Hesabatını PDF olaraq Yüklə
                     </button>
                 `;
@@ -2921,7 +3043,7 @@
                     let msg = encodeURIComponent(`Salam ${docName}, laboratoriya hesabatınız: ${statusText}. ACLab 3.6.`);
                     whatsappWrap.innerHTML = `
                         ${pdfButtonHtml}
-                        <a href="https://wa.me/${cleanPhone}?text=${msg}" target="_blank" class="btn btn-whatsapp" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:0;">
+                        <a href="https://wa.me/${cleanPhone}?text=${msg}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:0;">
                             Həkimə WhatsApp ilə Yaz
                         </a>
                     `;
@@ -2934,10 +3056,14 @@
             }
         }
 
-        function downloadDoctorPdfReport(docName) {
-            let element = document.getElementById('pdf-export-container');
+        function runPdfExport(elementId, selectId, docName) {
+            let element = document.getElementById(elementId);
             if (!element) {
                 alert('PDF üçün məlumat tapılmadı!');
+                return;
+            }
+            if (typeof html2pdf === 'undefined') {
+                alert('❌ PDF kitabxanası yüklənməyib. İnternet bağlantısını yoxlayın.');
                 return;
             }
 
@@ -2949,8 +3075,7 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Vaxtçшı gizlət / fokuslan
-            let sel = document.getElementById('doc-period-select');
+            let sel = document.getElementById(selectId);
             if (sel) sel.style.display = 'none';
 
             html2pdf().from(element).set(opt).save().then(() => {
@@ -2960,6 +3085,10 @@
                 if (sel) sel.style.display = 'block';
                 alert('❌ PDF xətası: ' + err.message);
             });
+        }
+
+        function downloadDoctorPdfReport(docName) {
+            runPdfExport('pdf-export-container', 'doc-period-select', docName);
         }
 
         function toggleDoctorJobsList() {
@@ -2981,8 +3110,8 @@
             docJobs.forEach((j, i) => {
                 let rem = formatMoney(formatMoney(j.price || 0) - (j.paidAmount || 0));
                 let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
-                html += `<div style="font-size:12px; padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeDocModal(); viewJobDetails('${j.id}')">
-                    ${i+1}. <b>${j.patient}</b> - Mərhələ: ${j.stage} - Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) (Borc: <span class="money-val">${rem} AZN</span>) ➔
+                html += `<div style="font-size:12px; padding:6px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="closeDocModal(); viewJobDetails(${jsArg(j.id)})">
+                    ${i+1}. <b>${escapeHtml(j.patient)}</b> - Mərhələ: ${escapeHtml(j.stage)} - Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) (Borc: <span class="money-val">${rem} AZN</span>) ➔
                 </div>`;
             });
             container.innerHTML = html;
@@ -2993,13 +3122,14 @@
             if (docModal) docModal.classList.add('hidden');
         }
 
+        /* ================= AI ÇAT ================= */
         function sendAiMessage() {
             let inputEl = document.getElementById('ai-input');
             if (!inputEl) return;
             let query = inputEl.value.trim();
             if (!query) return;
 
-            appendChatMessage(query, 'user');
+            appendChatMessage(escapeHtml(query), 'user');
             inputEl.value = '';
 
             setTimeout(() => {
@@ -3009,12 +3139,13 @@
             }, 300);
         }
 
-        function appendChatMessage(text, sender) {
+        // text artıq təhlükəsiz HTML olmalıdır (istifadəçi mətni escapeHtml ilə keçir)
+        function appendChatMessage(html, sender) {
             let chatBox = document.getElementById('ai-chat-history');
             if (!chatBox) return;
             let msgDiv = document.createElement('div');
             msgDiv.className = `chat-msg ${sender}`;
-            msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+            msgDiv.innerHTML = String(html).replace(/\n/g, '<br>');
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -3023,7 +3154,9 @@
             let q = query.toLowerCase().trim();
 
             if (pendingAiAction) {
-                if (q.includes('hə') || q.includes('he') || q.includes('bəli') || q.includes('beli') || q.includes('ok') || q.includes('təsdiq') || q.includes('et')) {
+                let cancelRe = /(ləğv|legv|xeyr|xeyir|yox|dayan|cancel|\bno\b|\bnə\b)/;
+                let confirmRe = /^(hə|he|hə hə|bəli|beli|ok|oke|okay|təsdiq|təsdiq edirəm|tesdiq|yes|razıyam|razi)[\s.!]*$/;
+                if (!cancelRe.test(q) && confirmRe.test(q)) {
                     let action = pendingAiAction;
                     pendingAiAction = null;
                     return action();
@@ -3033,60 +3166,50 @@
                 }
             }
 
-            let matchMinus = query.match(/(.+?)\s*-\s*(\d+)/);
+            // "Dr. Efrail -60" formatı (məbləğ sonda dayanmalıdır)
+            let matchMinus = query.match(/^(.+?)\s*-\s*(\d+(?:[.,]\d+)?)\s*$/);
             if (matchMinus) {
                 let searchNameRaw = matchMinus[1].trim();
-                let amount = Number(matchMinus[2]);
+                let amount = parseAmount(matchMinus[2]);
+                if (amount <= 0) return '❌ Məbləğ 0-dan böyük olmalıdır.';
 
                 let foundDocObj = appData.doctors.find(d => d.name.toLowerCase() === searchNameRaw.toLowerCase());
                 if (!foundDocObj) {
                     foundDocObj = appData.doctors.find(d => d.name.toLowerCase().includes(searchNameRaw.toLowerCase()));
                 }
-                if (!foundDocObj) return `❌ "${searchNameRaw}" adlı həkim tapılmadı.`;
+                if (!foundDocObj) return `❌ "${escapeHtml(searchNameRaw)}" adlı həkim tapılmadı.`;
                 let foundDoc = foundDocObj.name;
 
                 pendingAiAction = function() {
-                    appData.payments.push({ doctor: foundDoc, amount: amount, date: new Date().toISOString() });
-                    let docJobs = appData.jobs.filter(j => j.doctor === foundDoc);
-                    let remPay = amount;
-                    for (let job of docJobs) {
-                        let debt = formatMoney(formatMoney(job.price||0) - (job.paidAmount||0));
-                        if (debt > 0) {
-                            if (remPay >= debt) { remPay = formatMoney(remPay - debt); job.paidAmount = formatMoney(job.price); }
-                            else { job.paidAmount = formatMoney((job.paidAmount||0) + remPay); remPay = 0; break; }
-                        }
-                    }
-                    saveStore();
+                    applyPayment(foundDoc, amount);
                     let newBal = getDoctorBalance(foundDoc);
                     let balText = newBal > 0 ? `${formatMoney(newBal)} AZN Borc` : (newBal < 0 ? `${formatMoney(Math.abs(newBal))} AZN Avans` : `Təmizdir`);
-                    return `✅ <b>${foundDoc}</b> həkimi üçün <span class="money-val"><b>${formatMoney(amount)} AZN</b></span> ödəniş qəbul edildi!<br>Cari balans: <b>${balText}</b>`;
+                    return `✅ <b>${escapeHtml(foundDoc)}</b> həkimi üçün <span class="money-val"><b>${formatMoney(amount)} AZN</b></span> ödəniş qəbul edildi!<br>Cari balans: <b>${balText}</b>`;
                 };
-                return `⚠️ <b>${foundDoc}</b> həkimi üçün <span class="money-val"><b>${formatMoney(amount)} AZN</b></span> ödəniş / avans qeyd edilsin?<br>Təsdiq etmək üçün <b>"Bəli"</b> və ya <b>"Ok"</b> yazın.`;
+                return `⚠️ <b>${escapeHtml(foundDoc)}</b> həkimi üçün <span class="money-val"><b>${formatMoney(amount)} AZN</b></span> ödəniş / avans qeyd edilsin?<br>Təsdiq etmək üçün <b>"Bəli"</b> və ya <b>"Ok"</b> yazın.`;
             }
 
-            let matchedDocForPas = appData.doctors.find(d => q.includes(d.name.toLowerCase()) && (q.includes('pas') || q.includes('xəstə') || q.includes('is') || q.includes('iş')));
-            if (matchedDocForPas) {
-                let docJobs = appData.jobs.filter(j => j.doctor === matchedDocForPas.name);
-                if (docJobs.length === 0) return `📋 <b>${matchedDocForPas.name}</b> həkiminə aid heç bir pasient tapılmadı.`;
-                
-                let listStr = docJobs.map((j, i) => {
-                    let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
-                    return `${i+1}. <b style="color:var(--primary); cursor:pointer;" onclick="viewJobDetails('${j.id}')">👤 ${j.patient}</b> (Mərhələ: ${j.stage}, Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span>, ${jNet} AZN)`;
-                }).join('<br>');
-                return `📋 <b>${matchedDocForPas.name}</b> həkiminin pasientləri:<br>${listStr}`;
-            }
-
-            let matchedDocObj = null;
-            let sortedDocs = [...appData.doctors].sort((a,b) => b.name.length - a.name.length);
-            for (let d of sortedDocs) {
-                if (q === d.name.toLowerCase() || q.includes(d.name.toLowerCase())) {
-                    matchedDocObj = d;
-                    break;
-                }
-            }
+            // Ən uzun ad əvvəl yoxlanılır (məs: "Dr. Anar" və "Dr. Anar Əliyev" qarışmasın)
+            let sortedDocs = [...appData.doctors].sort((a, b) => b.name.length - a.name.length);
+            let matchedDocObj = sortedDocs.find(d => q.includes(d.name.toLowerCase()));
 
             if (matchedDocObj) {
                 let docName = matchedDocObj.name;
+                let rest = q.replace(docName.toLowerCase(), ' ');
+                // "is" kimi qısa hissələr hər sözdə rast gəlinirdi - indi yalnız tam söz
+                let wantsPatients = /(^|[\s,.;:!?])(pas|pasient|pasiyent|pasientlər|pasiyentlər|xəstə|xəstələr|iş|işlər|isler)([\s,.;:!?]|$)/.test(rest);
+
+                if (wantsPatients) {
+                    let docJobs = appData.jobs.filter(j => j.doctor === docName);
+                    if (docJobs.length === 0) return `📋 <b>${escapeHtml(docName)}</b> həkiminə aid heç bir pasient tapılmadı.`;
+
+                    let listStr = docJobs.map((j, i) => {
+                        let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
+                        return `${i+1}. <b style="color:var(--primary); cursor:pointer;" onclick="viewJobDetails(${jsArg(j.id)})">👤 ${escapeHtml(j.patient)}</b> (Mərhələ: ${escapeHtml(j.stage)}, Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span>, ${jNet} AZN)`;
+                    }).join('<br>');
+                    return `📋 <b>${escapeHtml(docName)}</b> həkiminin pasientləri:<br>${listStr}`;
+                }
+
                 let docJobs = appData.jobs.filter(j => j.doctor === docName);
                 let docPayments = appData.payments.filter(p => p.doctor === docName);
                 let totalPrice = formatMoney(docJobs.reduce((a, b) => a + formatMoney(b.price || 0), 0));
@@ -3096,46 +3219,36 @@
                 let balance = formatMoney(totalPrice - totalPaid);
                 let balStr = balance > 0 ? `${formatMoney(balance)} AZN Borc` : (balance < 0 ? `${formatMoney(Math.abs(balance))} AZN Avans` : `Təmizdir`);
 
-                return `📊 <b>${docName}</b> - Həkim Hesabatı:<br>` +
+                return `📊 <b>${escapeHtml(docName)}</b> - Həkim Hesabatı:<br>` +
                        `• Ümumi iş sayı: <b>${docJobs.length}</b><br>` +
                        `• Ümumi qazanc (Dövriyyə): <b class="money-val">${formatMoney(totalPrice)} AZN</b> (<span style="color:var(--neon-cyan);">${formatMoney(totalNet)} AZN</span>)<br>` +
                        `• Ödənilən: <b class="money-val">${formatMoney(totalPaid)} AZN</b><br>` +
                        `• Balans: <b style="color:${balance<0?'var(--success)':'var(--danger)'};" class="money-val">${balStr}</b>`;
             }
 
-            return `🤖 Sərbəst AI: Qeyd etdiyiniz "${query}" sorğusunu başa düşdüm. Həkim adını dəqiq yaza bilərsiniz (məs: <i>Dr. Efrail</i>) və ya ödəniş yaza bilərsiniz (məs: <i>Dr. Efrail -60</i>).`;
+            return `🤖 Sərbəst AI: Qeyd etdiyiniz "${escapeHtml(query)}" sorğusunu başa düşdüm. Həkim adını dəqiq yaza bilərsiniz (məs: <i>Dr. Efrail</i>) və ya ödəniş yaza bilərsiniz (məs: <i>Dr. Efrail -60</i>).`;
         }
 
-        function setupSearchDoc() { populateDoctorSelect('search-doctor-select'); runSearchByDoctor(); }
-        
+        /* ================= AXTARIŞ ================= */
+        function setupSearchDoc() { populateDoctorSelect('search-doctor-select'); runSearchByDoctor('all'); }
+
         function filterSearchDocPeriod(periodKey) {
             runSearchByDoctor(periodKey);
         }
 
-        function runSearchByDoctor(periodKey = 'all') {
+        function runSearchByDoctor(periodKey) {
+            periodKey = periodKey || 'all';
             let sel = document.getElementById('search-doctor-select');
             let res = document.getElementById('search-doc-dynamic-report');
             if (!sel || !res) return;
             let docName = sel.value;
-            
+            if (!docName) { res.innerHTML = '<div style="font-size:13px; color:var(--text-sub);">Həkim yoxdur.</div>'; return; }
+
             let docObj = appData.doctors.find(d => d.name === docName);
             let allDocJobs = appData.jobs.filter(j => j.doctor === docName);
             let docPayments = appData.payments.filter(p => p.doctor === docName);
 
-            let now = new Date();
-            let filteredJobs = allDocJobs.filter(j => {
-                let d = new Date(j.createdAt || j.date);
-                if (periodKey === '1month') {
-                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-                } else if (periodKey === '6months') {
-                    let sixMonthsAgo = new Date();
-                    sixMonthsAgo.setMonth(now.getMonth() - 6);
-                    return d >= sixMonthsAgo;
-                } else if (periodKey === '1year') {
-                    return d.getFullYear() === now.getFullYear();
-                }
-                return true;
-            });
+            let filteredJobs = filterJobsByPeriodKey(allDocJobs, periodKey);
 
             let totalPrice = formatMoney(filteredJobs.reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let totalMatCost = formatMoney(filteredJobs.reduce((a, b) => a + calculateJobMaterialCostForJob(b), 0));
@@ -3146,7 +3259,7 @@
 
             let tehvilSum = formatMoney(filteredJobs.filter(j => j.stage === 'Tehvil').reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let tehvilNet = formatMoney(filteredJobs.filter(j => j.stage === 'Tehvil').reduce((a, b) => a + formatMoney(formatMoney(b.price || 0) - calculateJobMaterialCostForJob(b)), 0));
-            
+
             let tehvilsizSum = formatMoney(filteredJobs.filter(j => j.stage !== 'Tehvil').reduce((a, b) => a + formatMoney(b.price || 0), 0));
             let tehvilsizNet = formatMoney(filteredJobs.filter(j => j.stage !== 'Tehvil').reduce((a, b) => a + formatMoney(formatMoney(b.price || 0) - calculateJobMaterialCostForJob(b)), 0));
 
@@ -3164,8 +3277,8 @@
                                 <option value="all" ${periodKey==='all'?'selected':''}>Bu günə kimi (Hamısı)</option>
                             </select>
                         </div>
-                        <h3 style="color:var(--primary); font-size:15px; margin-bottom:10px;">📊 ${docName} - Həkim Hesabatı</h3>
-                        <p><b>Telefon:</b> ${docObj && docObj.phone ? docObj.phone : 'Qeyd edilməyib'}</p>
+                        <h3 style="color:var(--primary); font-size:15px; margin-bottom:10px;">📊 ${escapeHtml(docName)} - Həkim Hesabatı</h3>
+                        <p><b>Telefon:</b> ${docObj && docObj.phone ? escapeHtml(docObj.phone) : 'Qeyd edilməyib'}</p>
                         <p><b>Ümumi İş Sayı:</b> ${filteredJobs.length}</p>
                         <p><b>Ümumi Qazanc (Dövriyyə):</b> <span class="money-val">${formatMoney(totalPrice)} AZN</span> (<span style="color:var(--neon-cyan);">${formatMoney(totalNetProfit)} AZN</span>)</p>
                         <p><b>Material Xərci:</b> <span style="color:var(--danger);" class="money-val">${formatMoney(totalMatCost)} AZN</span></p>
@@ -3176,9 +3289,9 @@
                     </div>
 
                     <div style="margin-top:12px;">
-                        <button type="button" class="btn btn-pdf" style="font-size:13px; font-weight:bold; margin-top:0;" onclick="downloadSearchDocPdfReport('${docName}')">📥 Bu Hesabatı PDF olaraq Yüklə</button>
+                        <button type="button" class="btn btn-pdf" style="font-size:13px; font-weight:bold; margin-top:0;" onclick="downloadSearchDocPdfReport(${jsArg(docName)})">📥 Bu Hesabatı PDF olaraq Yüklə</button>
                     </div>
-                    
+
                     <div style="margin-top:12px;">
                         <button type="button" class="btn btn-warning" style="font-size:13px;" onclick="toggleSearchDocArchive()">📁 İşlərin Arxivi</button>
                     </div>
@@ -3189,30 +3302,7 @@
         }
 
         function downloadSearchDocPdfReport(docName) {
-            let element = document.getElementById('search-pdf-export-container');
-            if (!element) {
-                alert('PDF üçün məlumat tapılmadı!');
-                return;
-            }
-
-            let opt = {
-                margin:       10,
-                filename:     `ACLab_Hesabat_${docName.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0b1120' },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            let sel = document.getElementById('search-doc-period-select');
-            if (sel) sel.style.display = 'none';
-
-            html2pdf().from(element).set(opt).save().then(() => {
-                if (sel) sel.style.display = 'block';
-                alert('✅ PDF hesabat uğurla endirildi!');
-            }).catch(err => {
-                if (sel) sel.style.display = 'block';
-                alert('❌ PDF xətası: ' + err.message);
-            });
+            runPdfExport('search-pdf-export-container', 'search-doc-period-select', docName);
         }
 
         function toggleSearchDocArchive() {
@@ -3234,15 +3324,15 @@
             docJobs.forEach((j, i) => {
                 let rem = formatMoney(formatMoney(j.price || 0) - (j.paidAmount || 0));
                 let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
-                html += `<div style="font-size:12px; padding:8px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="viewJobDetails('${j.id}')">
-                    ${i+1}. <b>👤 ${j.patient}</b> - Mərhələ: ${j.stage} - Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) (Borc: <span class="money-val">${rem} AZN</span>) ➔
+                html += `<div style="font-size:12px; padding:8px 0; border-bottom:1px solid var(--border-color); cursor:pointer;" onclick="viewJobDetails(${jsArg(j.id)})">
+                    ${i+1}. <b>👤 ${escapeHtml(j.patient)}</b> - Mərhələ: ${escapeHtml(j.stage)} - Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) (Borc: <span class="money-val">${rem} AZN</span>) ➔
                 </div>`;
             });
             container.innerHTML = html;
         }
 
-        function setupSearchPat() { 
-            populateDoctorSelect('search-pat-doc-select'); 
+        function setupSearchPat() {
+            populateDoctorSelect('search-pat-doc-select');
             let qInput = document.getElementById('search-patient-name-input');
             let res = document.getElementById('search-pat-results');
             if (qInput) qInput.value = '';
@@ -3254,37 +3344,38 @@
             let qInput = document.getElementById('search-patient-name-input');
             let res = document.getElementById('search-pat-results');
             if (!sel || !qInput || !res) return;
-            
+
             let docVal = sel.value;
             let q = qInput.value.trim().toLowerCase();
-            
+
             if (!q) {
                 res.innerHTML = '';
                 return;
             }
 
             let jobs = appData.jobs.filter(j => j.doctor === docVal);
-            jobs = jobs.filter(j => j.patient.toLowerCase().includes(q));
-            
+            jobs = jobs.filter(j => String(j.patient || '').toLowerCase().includes(q));
+
             let html = '';
             if (jobs.length === 0) {
                 html = '<div style="font-size:13px; color:var(--text-sub); text-align:center; padding:10px;">Uyğun pasient tapılmadı.</div>';
             } else {
                 jobs.forEach(j => {
-                    let rem = formatMoney(formatMoney(j.price||0) - (j.paidAmount||0));
-                    let jNet = formatMoney(formatMoney(j.price||0) - calculateJobMaterialCostForJob(j));
-                    html += `<div class="job-item" onclick="viewJobDetails('${j.id}')" style="cursor:pointer;"><div class="job-header"><span>👤 ${j.patient}</span><span class="badge">${j.stage}</span></div><div class="job-details">Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) | Borc: <span class="money-val">${rem} AZN</span></div></div>`;
+                    let rem = formatMoney(formatMoney(j.price || 0) - (j.paidAmount || 0));
+                    let jNet = formatMoney(formatMoney(j.price || 0) - calculateJobMaterialCostForJob(j));
+                    html += `<div class="job-item" onclick="viewJobDetails(${jsArg(j.id)})" style="cursor:pointer;"><div class="job-header"><span>👤 ${escapeHtml(j.patient)}</span><span class="badge">${escapeHtml(j.stage)}</span></div><div class="job-details">Qazanc: <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${jNet} AZN</span>) | Borc: <span class="money-val">${rem} AZN</span></div></div>`;
                 });
             }
             res.innerHTML = html;
         }
 
+        /* ================= İŞ DETALLARI ================= */
         function viewJobDetails(id) {
             let j = appData.jobs.find(item => item.id === id);
             if (!j) return;
             let mName = document.getElementById('modal-patient-name');
             if (mName) mName.innerText = j.patient + ' (' + j.doctor + ')';
-            
+
             let rem = formatMoney(formatMoney(j.price || 0) - (j.paidAmount || 0));
             let matCost = calculateJobMaterialCostForJob(j);
             let netProfit = formatMoney(formatMoney(j.price || 0) - matCost);
@@ -3304,21 +3395,25 @@
             }
 
             let topDetailsHtml = '';
-            if (j.topProtez && j.topProtez.length > 0) topDetailsHtml += `<p><b>Protez növü:</b> ${j.topProtez.join(', ')}</p>`;
-            if (j.topTamir && j.topTamir.length > 0) topDetailsHtml += `<p><b>Təmir:</b> ${j.topTamir.join(', ')}</p>`;
-            if (j.topElaveler && j.topElaveler.length > 0) topDetailsHtml += `<p><b>Əlavələr:</b> ${j.topElaveler.join(', ')}</p>`;
-            if (j.topKlammer && j.topKlammer.length > 0) topDetailsHtml += `<p><b>Klammer:</b> ${j.topKlammer.join(', ')}</p>`;
+            if (j.topProtez && j.topProtez.length > 0) topDetailsHtml += `<p><b>Protez növü:</b> ${escapeHtml(j.topProtez.join(', '))}</p>`;
+            if (j.topTamir && j.topTamir.length > 0) topDetailsHtml += `<p><b>Təmir:</b> ${escapeHtml(j.topTamir.join(', '))}</p>`;
+            if (j.topElaveler && j.topElaveler.length > 0) topDetailsHtml += `<p><b>Əlavələr:</b> ${escapeHtml(j.topElaveler.join(', '))}</p>`;
+            if (j.topKlammer && j.topKlammer.length > 0) topDetailsHtml += `<p><b>Klammer:</b> ${escapeHtml(j.topKlammer.join(', '))}</p>`;
+            let topTeethTxt = formatTeeth(j.topTeeth);
+            if (topTeethTxt) topDetailsHtml += `<p><b>Dişlər:</b> ${escapeHtml(topTeethTxt)}</p>`;
 
             let botDetailsHtml = '';
-            if (j.botProtez && j.botProtez.length > 0) botDetailsHtml += `<p><b>Protez növü:</b> ${j.botProtez.join(', ')}</p>`;
-            if (j.botTamir && j.botTamir.length > 0) botDetailsHtml += `<p><b>Təmir:</b> ${j.botTamir.join(', ')}</p>`;
-            if (j.botElaveler && j.botElaveler.length > 0) botDetailsHtml += `<p><b>Əlavələr:</b> ${j.botElaveler.join(', ')}</p>`;
-            if (j.botKlammer && j.botKlammer.length > 0) botDetailsHtml += `<p><b>Klammer:</b> ${j.botKlammer.join(', ')}</p>`;
+            if (j.botProtez && j.botProtez.length > 0) botDetailsHtml += `<p><b>Protez növü:</b> ${escapeHtml(j.botProtez.join(', '))}</p>`;
+            if (j.botTamir && j.botTamir.length > 0) botDetailsHtml += `<p><b>Təmir:</b> ${escapeHtml(j.botTamir.join(', '))}</p>`;
+            if (j.botElaveler && j.botElaveler.length > 0) botDetailsHtml += `<p><b>Əlavələr:</b> ${escapeHtml(j.botElaveler.join(', '))}</p>`;
+            if (j.botKlammer && j.botKlammer.length > 0) botDetailsHtml += `<p><b>Klammer:</b> ${escapeHtml(j.botKlammer.join(', '))}</p>`;
+            let botTeethTxt = formatTeeth(j.bottomTeeth);
+            if (botTeethTxt) botDetailsHtml += `<p><b>Dişlər:</b> ${escapeHtml(botTeethTxt)}</p>`;
 
             let contentHtml = `
                 <p><b>Qeydiyyat tarixi:</b> <span style="color:var(--primary);">${createdFormatted}</span></p>
-                <p><b>A.S. Dr.:</b> ${j.doctor}</p>
-                <p><b>A.S. Pasient:</b> ${j.patient}</p>
+                <p><b>A.S. Dr.:</b> ${escapeHtml(j.doctor)}</p>
+                <p><b>A.S. Pasient:</b> ${escapeHtml(j.patient)}</p>
                 <p><b>Status:</b> ${urgentText} ${probText}</p>
             `;
 
@@ -3338,19 +3433,29 @@
                 `;
             }
 
+            let qn = j.qarnitur;
+            if (qn && (qn.rang || qn.razmer || qn.ad || qn.forma)) {
+                contentHtml += `
+                    <hr style="margin:8px 0; border-color:var(--border-color);">
+                    <p style="color:var(--primary); font-weight:bold;">🎨 QARNİTUR:</p>
+                    <p><b>Rəng:</b> ${escapeHtml(qn.rang || '-')} | <b>Razmer:</b> ${escapeHtml(qn.razmer || '-')}</p>
+                    <p><b>Ad:</b> ${escapeHtml(qn.ad || '-')} | <b>Forma:</b> ${escapeHtml(qn.forma || '-')}</p>
+                `;
+            }
+
             if (j.note) {
                 contentHtml += `
                     <hr style="margin:8px 0; border-color:var(--border-color);">
                     <p style="color:var(--warning); font-weight:bold;">📝 ƏLAVƏ QEYD:</p>
-                    <p style="background:var(--input-bg); padding:8px; border-radius:8px; margin-top:4px;">${j.note}</p>
+                    <p style="background:var(--input-bg); padding:8px; border-radius:8px; margin-top:4px;">${escapeHtml(j.note)}</p>
                 `;
             }
 
             contentHtml += `
                 <hr style="margin:8px 0; border-color:var(--border-color);">
-                <p><b>Mərhələ:</b> <span class="badge">${j.stage}</span></p>
-                <p><b>Status Tarixi:</b> ${j.deliveryDate || 'Yoxdur'}</p>
-                <p><b>Xatırlatma Saatı:</b> ${j.alarm ? j.alarm.replace('T', ' ') : 'Yoxdur'}</p>
+                <p><b>Mərhələ:</b> <span class="badge">${escapeHtml(j.stage)}</span></p>
+                <p><b>Status Tarixi:</b> ${escapeHtml(j.deliveryDate || 'Yoxdur')}</p>
+                <p><b>Xatırlatma Saatı:</b> ${j.alarm ? escapeHtml(j.alarm.replace('T', ' ')) : 'Yoxdur'}</p>
                 <p><b>Qazanc (Məbləğ):</b> <span class="money-val">${formatMoney(j.price)} AZN</span> (<span style="color:var(--neon-cyan);">${netProfit} AZN</span>) | <b>Qalan borc:</b> <strong style="color:var(--danger);" class="money-val">${rem} AZN</strong></p>
                 <p><b>Material Xərci:</b> <span style="color:var(--danger);" class="money-val">${matCost} AZN</span></p>
             `;
@@ -3360,23 +3465,21 @@
 
             let editBtn = document.getElementById('modal-edit-btn');
             if (editBtn) editBtn.onclick = function() { closeModal(); editJob(j.id); };
-            
+
             let jModal = document.getElementById('job-details-modal');
             if (jModal) jModal.classList.remove('hidden');
         }
 
-        function closeModal() { 
+        function closeModal() {
             let jModal = document.getElementById('job-details-modal');
-            if (jModal) jModal.classList.add('hidden'); 
+            if (jModal) jModal.classList.add('hidden');
         }
-        
+
         function checkStageChange() {
-            let stageEl = document.getElementById('jf-stage');
             let deliveryInput = document.getElementById('jf-delivery-date');
-            if (!stageEl || !deliveryInput) return;
+            if (!deliveryInput) return;
             if (!deliveryInput.value) {
-                let today = new Date().toISOString().split('T')[0];
-                deliveryInput.value = today;
+                deliveryInput.value = localDateStr();
             }
         }
 
@@ -3396,14 +3499,19 @@
             if (eJobId) eJobId.value = '';
             if (jPat) jPat.value = '';
             if (jStg) jStg.value = 'İlk ölçü';
-            if (jDel) jDel.value = new Date().toISOString().split('T')[0];
+            if (jDel) jDel.value = localDateStr();
             if (jPr) jPr.value = '';
             if (jAlm) jAlm.value = '';
             if (jUrg) jUrg.checked = false;
             if (jProb) jProb.checked = false;
             if (jNote) jNote.value = '';
 
-            document.querySelectorAll('.jaw-box').forEach(box => box.classList.remove('open'));
+            ['qarnitur-rang', 'qarnitur-razmer', 'qarnitur-ad', 'qarnitur-forma'].forEach(id => {
+                let el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+
+            document.querySelectorAll('#screen-job-form .jaw-box').forEach(box => box.classList.remove('open'));
 
             populateDoctorSelect('jf-doctor');
             buildTeethGrid();
@@ -3424,7 +3532,7 @@
 
         function editJob(id) {
             let j = appData.jobs.find(item => item.id === id);
-            if(!j) return;
+            if (!j) return;
             openAddJob();
             let hHead = document.getElementById('job-form-heading');
             let eJobId = document.getElementById('edit-job-id');
@@ -3450,18 +3558,30 @@
             if (jProb) jProb.checked = !!j.isProblematic;
             if (jNote) jNote.value = j.note || '';
 
-            if (j.topProtez) j.topProtez.forEach(val => { let cb = document.querySelector(`#top-protez-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
-            if (j.topTamir) j.topTamir.forEach(val => { let cb = document.querySelector(`#top-tamir-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
-            if (j.topElaveler) j.topElaveler.forEach(val => { let cb = document.querySelector(`#top-elaveler-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
-            if (j.topKlammer) j.topKlammer.forEach(val => { let cb = document.querySelector(`#top-klammer-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
+            let qn = j.qarnitur || {};
+            let setVal = (id, v) => { let el = document.getElementById(id); if (el) el.value = v || ''; };
+            setVal('qarnitur-rang', qn.rang);
+            setVal('qarnitur-razmer', qn.razmer);
+            setVal('qarnitur-ad', qn.ad);
+            setVal('qarnitur-forma', qn.forma);
 
-            if (j.botProtez) j.botProtez.forEach(val => { let cb = document.querySelector(`#bot-protez-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
-            if (j.botTamir) j.botTamir.forEach(val => { let cb = document.querySelector(`#bot-tamir-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
-            if (j.botElaveler) j.botElaveler.forEach(val => { let cb = document.querySelector(`#bot-elaveler-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
-            if (j.botKlammer) j.botKlammer.forEach(val => { let cb = document.querySelector(`#bot-klammer-boxes input[value="${val}"]`); if (cb) cb.checked = true; });
+            let checkAll = (containerId, arr) => {
+                if (!Array.isArray(arr)) return;
+                document.querySelectorAll(`#${containerId} input[type="checkbox"]`).forEach(cb => {
+                    if (arr.includes(cb.value)) cb.checked = true;
+                });
+            };
+            checkAll('top-protez-boxes', j.topProtez);
+            checkAll('top-tamir-boxes', j.topTamir);
+            checkAll('top-elaveler-boxes', j.topElaveler);
+            checkAll('top-klammer-boxes', j.topKlammer);
+            checkAll('bot-protez-boxes', j.botProtez);
+            checkAll('bot-tamir-boxes', j.botTamir);
+            checkAll('bot-elaveler-boxes', j.botElaveler);
+            checkAll('bot-klammer-boxes', j.botKlammer);
 
-            if (j.topTeeth) j.topTeeth.forEach(num => { let b = document.querySelector(`.tooth-btn[data-jaw="top"][data-num="${num}"]`); if (b) b.classList.add('selected'); });
-            if (j.bottomTeeth) j.bottomTeeth.forEach(num => { let b = document.querySelector(`.tooth-btn[data-jaw="bottom"][data-num="${num}"]`); if (b) b.classList.add('selected'); });
+            restoreTeeth('top', j.topTeeth);
+            restoreTeeth('bottom', j.bottomTeeth);
 
             calculateJobEstimatedCost();
         }
@@ -3487,15 +3607,10 @@
             let patient = patEl.value.trim();
             let price = formatMoney(Number(priceEl.value));
 
+            if (!doctor) { alert('Əvvəlcə həkim seçin! (İdarə bölməsindən həkim əlavə edə bilərsiniz)'); return; }
             if (!patient || !price) { alert('Pasient adı və qiymət daxil edilməlidir!'); return; }
 
             let currentBal = getDoctorBalance(doctor);
-            if (id) {
-                let existingJob = appData.jobs.find(j => j.id === id);
-                if (existingJob && existingJob.doctor === doctor) {
-                    currentBal = formatMoney(currentBal - formatMoney(existingJob.price || 0));
-                }
-            }
 
             if (!id && currentBal < 0) {
                 let avansAmount = formatMoney(Math.abs(currentBal));
@@ -3504,21 +3619,20 @@
                 if (avansText && avansModal) {
                     let deductAmount = formatMoney(Math.min(avansAmount, price));
                     let remainingAvans = formatMoney(avansAmount - deductAmount);
-                    let jobPaidAmount = deductAmount;
                     let remainingJobDebt = formatMoney(price - deductAmount);
 
                     avansText.innerHTML = `
-                        • <b>Həkim:</b> ${doctor}<br>
+                        • <b>Həkim:</b> ${escapeHtml(doctor)}<br>
                         • <b>Mövcud Avans:</b> <span class="money-val">${avansAmount} AZN</span><br>
                         • <b>Yeni İşin Dəyəri:</b> <span class="money-val">${price} AZN</span><br>
                         • <b>Avansdan Çıxılacaq Məbləğ:</b> <span class="money-val">${deductAmount} AZN</span><br>
                         • <b>Qalacaq Avans:</b> <span class="money-val">${remainingAvans} AZN</span><br>
-                        • <b>İşin Ödəniləcək Hissəsi:</b> <span class="money-val">${jobPaidAmount} AZN</span><br>
+                        • <b>İşin Ödəniləcək Hissəsi:</b> <span class="money-val">${deductAmount} AZN</span><br>
                         • <b>İşin Üzərində Qalacaq Borc:</b> <span class="money-val">${remainingJobDebt} AZN</span><br><br>
-                        <i><b>"Bəli (Avansdan çıx)"</b> seçsəniz: Avans azaldılacaq və iş ödənilmiş sayılacaq.<br><b>"Xeyir (Avansa toxunma)"</b> seçsəniz: Avansınız eyni qalacaq.</i>
+                        <i><b>"Bəli (Avansdan çıx)"</b> seçsəniz: işin ödənilmiş hissəsi avansdan çıxılacaq.<br><b>"Xeyir (Avansa toxunma)"</b> seçsəniz: iş ödənilməmiş kimi qeyd olunacaq, ödəniş sonradan ayrıca qəbul edilə bilər.</i>
                     `;
                     avansModal.classList.remove('hidden');
-                    
+
                     avansCallback = function(useAvans) {
                         executeSaveJob(useAvans ? deductAmount : 0);
                     };
@@ -3531,7 +3645,7 @@
         function resolveAvansChoice(choice) {
             let avansModal = document.getElementById('avans-confirm-modal');
             if (avansModal) avansModal.classList.add('hidden');
-            
+
             if (avansCallback) {
                 let cb = avansCallback;
                 avansCallback = null;
@@ -3574,38 +3688,39 @@
             let isProblematic = probEl ? probEl.checked : false;
             let note = noteEl ? noteEl.value.trim() : '';
 
-            let topProtez = getCheckedValues('top-protez-boxes');
-            let topTamir = getCheckedValues('top-tamir-boxes');
-            let topElaveler = getCheckedValues('top-elaveler-boxes');
-            let topKlammer = getCheckedValues('top-klammer-boxes');
+            let topSel = getFormSelection('top');
+            let botSel = getFormSelection('bot');
 
-            let botProtez = getCheckedValues('bot-protez-boxes');
-            let botTamir = getCheckedValues('bot-tamir-boxes');
-            let botElaveler = getCheckedValues('bot-elaveler-boxes');
-            let botKlammer = getCheckedValues('bot-klammer-boxes');
+            let topProtez = topSel.protez, topTamir = topSel.tamir, topElaveler = topSel.elaveler, topKlammer = topSel.klammer;
+            let botProtez = botSel.protez, botTamir = botSel.tamir, botElaveler = botSel.elaveler, botKlammer = botSel.klammer;
 
             let topTeeth = [], bottomTeeth = [];
             document.querySelectorAll('.tooth-btn.selected').forEach(b => {
-                if (b.dataset.jaw === 'top') topTeeth.push(b.dataset.num);
-                if (b.dataset.jaw === 'bottom') bottomTeeth.push(b.dataset.num);
+                if (b.dataset.jaw === 'top') topTeeth.push(b.dataset.key);
+                if (b.dataset.jaw === 'bottom') bottomTeeth.push(b.dataset.key);
             });
 
-            let topAll = [...topProtez, ...topTamir, ...topElaveler, ...topKlammer];
-            let botAll = [...botProtez, ...botTamir, ...botElaveler, ...botKlammer];
-            let materialCost = calculateMaterialCostForSelections(topAll, botAll);
+            let getVal = (elId) => { let el = document.getElementById(elId); return el ? el.value.trim() : ''; };
+            let qarnitur = {
+                rang: getVal('qarnitur-rang'),
+                razmer: getVal('qarnitur-razmer'),
+                ad: getVal('qarnitur-ad'),
+                forma: getVal('qarnitur-forma')
+            };
 
-            let finalPaidAmount = deductPaidAmount > 0 ? price : 0;
+            let materialCost = calculateDetailedMaterialCost(topSel, botSel).total;
 
             if (id) {
                 let j = appData.jobs.find(item => item.id === id);
-                let alarmChanged = j ? j.alarm !== alarm : false;
                 if (j) {
-                    Object.assign(j, { 
-                        doctor, patient, stage, deliveryDate, price, materialCost, alarm, isUrgent, isProblematic, note,
+                    let alarmChanged = j.alarm !== alarm;
+                    let newPaid = Math.min(formatMoney(j.paidAmount || 0), price);   // qiymət azalsa, ödənilən məbləğ qiyməti keçməsin
+                    Object.assign(j, {
+                        doctor, patient, stage, deliveryDate, price, materialCost, matFrozen: true, alarm, isUrgent, isProblematic, note,
                         topProtez, topTamir, topElaveler, topKlammer,
                         botProtez, botTamir, botElaveler, botKlammer,
-                        topTeeth, bottomTeeth, 
-                        paidAmount: deductPaidAmount > 0 ? price : (j.paidAmount || 0),
+                        topTeeth, bottomTeeth, qarnitur,
+                        paidAmount: newPaid,
                         notified: alarmChanged ? false : j.notified,
                         dismissed: alarmChanged ? false : j.dismissed
                     });
@@ -3613,13 +3728,13 @@
             } else {
                 appData.jobs.push({
                     id: 'j_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-                    doctor, patient, stage, deliveryDate, price, materialCost, alarm, isUrgent, isProblematic, note,
+                    doctor, patient, stage, deliveryDate, price, materialCost, matFrozen: true, alarm, isUrgent, isProblematic, note,
                     topProtez, topTamir, topElaveler, topKlammer,
                     botProtez, botTamir, botElaveler, botKlammer,
-                    topTeeth, bottomTeeth, 
-                    paidAmount: finalPaidAmount, 
+                    topTeeth, bottomTeeth, qarnitur,
+                    paidAmount: deductPaidAmount > 0 ? formatMoney(Math.min(deductPaidAmount, price)) : 0,
                     createdAt: new Date().toISOString(),
-                    date: new Date().toISOString(), 
+                    date: new Date().toISOString(),
                     notified: false,
                     dismissed: false
                 });
@@ -3627,16 +3742,19 @@
 
             saveStore();
             navTo('screen-home');
-            
-            setTimeout(() => { 
-                isSavingInProgress = false; 
+
+            setTimeout(() => {
+                isSavingInProgress = false;
                 if (saveBtn) saveBtn.disabled = false;
             }, 400);
         }
 
-        function setupAddMoney() { 
-            populateDoctorSelect('pay-doctor'); 
-            updatePayDebtInfo(); 
+        /* ================= ÖDƏNİŞ ================= */
+        function setupAddMoney() {
+            populateDoctorSelect('pay-doctor');
+            let amt = document.getElementById('pay-amount');
+            if (amt) amt.value = '';
+            updatePayDebtInfo();
         }
 
         function updatePayDebtInfo() {
@@ -3655,36 +3773,21 @@
             let amtEl = document.getElementById('pay-amount');
             if (!docEl || !amtEl) return;
             let doc = docEl.value;
+            if (!doc) { alert('Həkim seçilməyib!'); return; }
             let amount = formatMoney(Number(amtEl.value));
-            if(!amount) return;
+            if (!amount || amount <= 0) { alert('Məbləğ 0-dan böyük olmalıdır!'); return; }
 
-            appData.payments.push({ doctor: doc, amount: amount, date: new Date().toISOString() });
-            
-            let docJobs = appData.jobs.filter(j => j.doctor === doc);
-            let remPay = amount;
-            for (let job of docJobs) {
-                let debt = formatMoney(formatMoney(job.price || 0) - (job.paidAmount || 0));
-                if (debt > 0) {
-                    if (remPay >= debt) { 
-                        remPay = formatMoney(remPay - debt); 
-                        job.paidAmount = formatMoney(job.price); 
-                    } else { 
-                        job.paidAmount = formatMoney((job.paidAmount || 0) + remPay); 
-                        remPay = 0; 
-                        break; 
-                    }
-                }
-            }
+            let remPay = applyPayment(doc, amount);
 
-            saveStore();
             alert(`Ödəniş qəbul edildi! ${remPay > 0 ? 'Artıq qalan ' + formatMoney(remPay) + ' AZN həkimin avansına əlavə olundu.' : ''}`);
             navTo('screen-home');
         }
 
+        /* ================= İDARƏ PANELİ ================= */
         function renderControlPanel() {
             let emailEl = document.getElementById('cp-user-email');
             if (emailEl) emailEl.value = appData.email || '';
-            
+
             let delDocSel = document.getElementById('cp-del-doc-select');
             if (delDocSel) {
                 delDocSel.innerHTML = '';
@@ -3703,8 +3806,8 @@
                 Object.entries(mats).forEach(([key, val]) => {
                     matHtml += `
                         <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--input-bg); padding:8px 12px; border-radius:10px; border:1px solid var(--border-color);">
-                            <span style="font-size:12px; font-weight:700; color:var(--text-main); flex:1;">${key}</span>
-                            <input type="number" step="0.01" value="${formatMoney(val)}" data-mat-key="${key}" style="width:100px; padding:6px 10px; font-size:13px; text-align:right;">
+                            <span style="font-size:12px; font-weight:700; color:var(--text-main); flex:1;">${escapeHtml(key)}</span>
+                            <input type="number" step="0.01" value="${formatMoney(val)}" data-mat-key="${escapeHtml(key)}" style="width:100px; padding:6px 10px; font-size:13px; text-align:right;">
                         </div>
                     `;
                 });
@@ -3716,8 +3819,8 @@
                 html += `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--input-bg); border:1px solid var(--border-color); border-radius:10px; margin-bottom:6px;">
                         <div>
-                            <strong style="font-size:13px;">${d.name}</strong>
-                            <div style="font-size:11px; color:var(--text-sub);">Tel: ${d.phone || 'Yoxdur'}</div>
+                            <strong style="font-size:13px;">${escapeHtml(d.name)}</strong>
+                            <div style="font-size:11px; color:var(--text-sub);">Tel: ${escapeHtml(d.phone || 'Yoxdur')}</div>
                         </div>
                         <div style="display:flex; gap:6px;">
                             <button type="button" class="btn btn-warning" style="width:auto; padding:4px 10px; font-size:11px; margin-top:0;" onclick="cpEditDoctor(${idx})">✏️</button>
@@ -3740,27 +3843,43 @@
             let phone = phoneEl.value.trim();
             let editIdx = editIdxEl.value;
 
-            if (name) {
+            if (!name) { alert('Həkimin adı boş ola bilməz!'); return; }
+
+            if (editIdx !== '') {
+                let idx = Number(editIdx);
+                let oldDoc = appData.doctors[idx];
+                if (!oldDoc) return;
+                let oldName = oldDoc.name;
+
+                if (name !== oldName && appData.doctors.some((d, i) => i !== idx && d.name === name)) {
+                    alert('Bu adlı həkim artıq mövcuddur!');
+                    return;
+                }
                 if (!confirm(`⚠️ "${name}" həkimini yadda saxlamaq istədiyinizə əminsinizmi?`)) return;
 
-                if (editIdx !== '') {
-                    appData.doctors[editIdx] = { name, phone };
-                    editIdxEl.value = '';
-                    let saveBtn = document.getElementById('cp-doc-save-btn');
-                    if (saveBtn) saveBtn.innerText = 'Həkim Əlavə Et';
-                } else {
-                    if (!appData.doctors.some(d => d.name === name)) {
-                        appData.doctors.push({ name, phone });
-                    } else {
-                        alert('Bu həkim artıq mövcuddur!');
-                        return;
-                    }
+                appData.doctors[idx] = { name, phone };
+                // Ad dəyişəndə işlər və ödənişlər də yeni ada köçürülür (hesab sıfırlanmasın)
+                if (name !== oldName) {
+                    appData.jobs.forEach(j => { if (j.doctor === oldName) j.doctor = name; });
+                    appData.payments.forEach(p => { if (p.doctor === oldName) p.doctor = name; });
                 }
-                nameEl.value = '';
-                phoneEl.value = '';
-                saveStore();
-                renderControlPanel();
+
+                editIdxEl.value = '';
+                let saveBtn = document.getElementById('cp-doc-save-btn');
+                if (saveBtn) saveBtn.innerText = 'Həkim Əlavə Et';
+            } else {
+                if (appData.doctors.some(d => d.name === name)) {
+                    alert('Bu həkim artıq mövcuddur!');
+                    return;
+                }
+                if (!confirm(`⚠️ "${name}" həkimini yadda saxlamaq istədiyinizə əminsinizmi?`)) return;
+                appData.doctors.push({ name, phone });
             }
+
+            nameEl.value = '';
+            phoneEl.value = '';
+            saveStore();
+            renderControlPanel();
         }
 
         function cpEditDoctor(idx) {
@@ -3772,30 +3891,37 @@
             let saveBtn = document.getElementById('cp-doc-save-btn');
 
             if (nameEl) nameEl.value = doc.name;
-            if (phoneEl) phoneEl.value = doc.phone;
+            if (phoneEl) phoneEl.value = doc.phone || '';
             if (editIdxEl) editIdxEl.value = idx;
             if (saveBtn) saveBtn.innerText = 'Dəyişikliyi Yadda Saxla';
         }
 
-        function cpDelDoc(idx) { 
+        function cpDelDoc(idx) {
             let doc = appData.doctors[idx];
             if (!doc) return;
             let docName = doc.name;
+
+            let hasData = appData.jobs.some(j => j.doctor === docName) || appData.payments.some(p => p.doctor === docName);
+            if (hasData) {
+                alert(`❌ "${docName}" həkiminə aid iş və ya ödəniş qeydləri var. Əvvəlcə "Həkim Üzrə Məlumat Sil" ilə onları silin, sonra həkimi silin.`);
+                return;
+            }
+
             if (confirm(`⚠️ Diqqət! "${docName}" həkimini silmək istədiyinizə əminsinizmi?`)) {
-                appData.doctors.splice(idx, 1); 
-                saveStore(); 
-                renderControlPanel(); 
+                appData.doctors.splice(idx, 1);
+                saveStore();
+                renderControlPanel();
             }
         }
 
         function populateDoctorSelect(elemId) {
             let sel = document.getElementById(elemId);
-            if(!sel) return;
+            if (!sel) return;
             sel.innerHTML = '';
             appData.doctors = appData.doctors || [];
             appData.doctors.forEach(d => {
                 let opt = document.createElement('option');
-                opt.value = d.name; 
+                opt.value = d.name;
                 opt.innerText = d.name;
                 sel.appendChild(opt);
             });
