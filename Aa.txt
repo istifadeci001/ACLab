@@ -1,0 +1,10 @@
+1. Parol unuddum bolmesine girende proqram acilir. 
+Tehlukelidir. Login parol istemeden girir ozde.
+
+2. Sifrwni unuddum bolmesi 2 funsiyali islesin.
+Birinci maile gondersin sifreni.
+Ikinci tehlukesizlik kodu duzgun yazilsa sifreni yenikemek olsun
+
+
+
+3.  Xeta yazilarinda sayt adi gosterilmesin uzun gorunur.
