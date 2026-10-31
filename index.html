@@ -1040,9 +1040,9 @@
                 <div class="chat-box" id="ai-chat-history">
                     <div class="chat-msg ai">
                         Salam! Mən ACLab 3.6 köməkçisiyəm. İstənilən vaxt sərbəst sual verə bilərsiniz:<br>
-                        • <i>"Dr. Efrail"</i> (həkimin dəqiq hesabatı)<br>
-                        • <i>"Dr. Efrail pas"</i> (həkimin pasiyentləri)<br>
-                        • <i>"Dr. Efrail -60"</i> (həkimə ödəniş / avans daxil etmək)
+                        • <i>"Dr_Deomo"</i> (həkimin dəqiq hesabatı)<br>
+                        • <i>"Dr_Deomo pas"</i> (həkimin pasiyentləri)<br>
+                        • <i>"Dr_Deomo -60"</i> (həkimə ödəniş / avans daxil etmək)
                     </div>
                 </div>
 
@@ -1488,7 +1488,7 @@
                 secretWord: '',
                 materials: {...DEFAULT_MATERIALS},
                 doctors: [
-                    { name: 'Dr. Efrail', phone: '' },
+                    { name: 'Dr_Deomo', phone: '' },
                     { name: 'Dr. Anar', phone: '' }
                 ],
                 jobs: [],
@@ -3221,7 +3221,7 @@
                 }
             }
 
-            // "Dr. Efrail -60" formatı (məbləğ sonda dayanmalıdır)
+            // "Dr_Deomo -60" formatı (məbləğ sonda dayanmalıdır)
             let matchMinus = query.match(/^(.+?)\s*-\s*(\d+(?:[.,]\d+)?)\s*$/);
             if (matchMinus) {
                 let searchNameRaw = matchMinus[1].trim();
@@ -3281,7 +3281,7 @@
                        `• Balans: <b style="color:${balance<0?'var(--success)':'var(--danger)'};" class="money-val">${balStr}</b>`;
             }
 
-            return `🤖 Sərbəst AI: Qeyd etdiyiniz "${escapeHtml(query)}" sorğusunu başa düşdüm. Həkim adını dəqiq yaza bilərsiniz (məs: <i>Dr. Efrail</i>) və ya ödəniş yaza bilərsiniz (məs: <i>Dr. Efrail -60</i>).`;
+            return `🤖 Sərbəst AI: Qeyd etdiyiniz "${escapeHtml(query)}" sorğusunu başa düşdüm. Həkim adını dəqiq yaza bilərsiniz (məs: <i>Dr_Deomo</i>) və ya ödəniş yaza bilərsiniz (məs: <i>Dr_Deomo -60</i>).`;
         }
 
         /* ================= AXTARIŞ ================= */
